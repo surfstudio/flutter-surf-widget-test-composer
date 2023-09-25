@@ -125,7 +125,7 @@ void main() {
     setup: (context, mode) {
       when(() => wm.data).thenReturn(EntityValueNotifier(mockData));
       when(() => wm.theme).thenReturn(Theme.of(context));
-      when(wm.onSubmitPressed).thenAnswer((_) => Future.value())
+      when(wm.onSubmitPressed).thenAnswer((_) => Future.value());
       when(wm.onCancelPressed).thenReturn(null);
     },
     test: (tester, theme) async {
@@ -194,3 +194,27 @@ This error means that the widget you are testing has an infinite loop. Usually t
       color: Colors.blue,
     )
   ```
+
+## Changelog
+
+All notable changes to this project will be documented in [this file](./CHANGELOG.md).
+
+## Issues
+
+To report your issues, submit them directly in the [Issues](https://github.com/surfstudio/flutter-surf-widget-test-composer/issues) section.
+
+## Contribute
+
+If you would like to contribute to the package (e.g. by improving the documentation, fixing a bug or adding a cool new feature), please read our [contribution guide](./CONTRIBUTING.md) first and send us your pull request.
+
+Your PRs are always welcome.
+
+## How to reach us
+
+Please feel free to ask any questions about this package. Join our community chat on Telegram. We speak English and Russian.
+
+[![Telegram](https://img.shields.io/badge/chat-on%20Telegram-blue.svg)](https://t.me/SurfGear)
+
+## License
+
+[Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)
