@@ -1,17 +1,21 @@
-## Features
+# Widget Test Composer
+
+## Description
 
 Utility that simplifies widget and golden testing.
 
-## Getting started
+## Installation
 
-First of all you need to add `surf_widget_test_composer` to your `pubspec.yaml`:
+Add `surf_widget_test_composer` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  surf_widget_test_composer: ^0.0.1
+  surf_widget_test_composer: $currentVersion$
 ```
 
-Then you need to create file `test/flutter_test_config.dart`. There you will specify:
+## Getting started
+
+You need to create file `test/flutter_test_config.dart`. There you will specify:
 - themes of your app you need to test;
 - localizations of your app;
 - list of devices you want to test on.
@@ -107,10 +111,10 @@ const _localizationsDelegates = [
 
 ## Usage
 
-
 **IMPORTANT**: Always specify the generic type of the widget you are testing (e.g.,`testWidget<TestableScreen>`), as the golden's name generation is based on the widget class name.
 
-Example usage:
+## Example
+
 ```dart
 class MockTestableScreenWM extends Mock implements ITestableScreenWM {}
 
