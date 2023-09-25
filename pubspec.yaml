@@ -1,6 +1,9 @@
 name: surf_widget_test_composer
-description: A new Flutter package project.
+description: Utility that simplifies widget and golden testing.
 version: 0.0.1
+
+repository: "https://github.com/surfstudio/flutter-surf-widget-test-composer"
+issue_tracker: "https://github.com/surfstudio/flutter-surf-widget-test-composer/issues"
 
 environment:
   sdk: '>=3.0.5 <4.0.0'
