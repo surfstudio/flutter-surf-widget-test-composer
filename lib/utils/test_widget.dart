@@ -29,7 +29,7 @@ typedef TestFunctionWithTheme = Future Function(WidgetTester, ThemeData);
 /// - [deviceSetup] - Allows specifying the setup function for each device.
 @isTest
 void testWidget<T extends Widget>({
-  required Widget Function(ThemeType) widgetBuilder,
+  required Widget Function(BuildContext, ThemeType) widgetBuilder,
   String? desc,
   TestFunctionWithTheme? test,
   void Function(BuildContext, ThemeMode)? setup,
@@ -67,7 +67,7 @@ void testWidget<T extends Widget>({
                 setup?.call(context, theme.type.toThemeMode);
                 return ColoredBox(
                   color: getBackgroundColor(theme.data),
-                  child: widgetBuilder(theme.type),
+                  child: widgetBuilder(context, theme.type),
                 );
               },
               theme.type,

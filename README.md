@@ -120,8 +120,8 @@ void main() {
   final wm = MockTestableScreenWM();
 
   testWidget<TestableScreen>(
-    'Test screen',
-    widgetBuilder: (_) => widget.build(wm),
+    desc: 'Test screen',
+    widgetBuilder: (_, __) => widget.build(wm),
     setup: (context, mode) {
       when(() => wm.data).thenReturn(EntityValueNotifier(mockData));
       when(() => wm.theme).thenReturn(Theme.of(context));
@@ -146,8 +146,8 @@ void main() {
 
   /// Nothing to test, just want to generate the golden.
   testWidget<TestableScreen>(
-    'Test screen - loading',
-    widgetBuilder: (_) => widget.build(wm),
+    desc: 'Test screen - loading',
+    widgetBuilder: (_, __) => widget.build(wm),
     /// Since we are testing a specific widget state, we fill in the [screenState] property.
     screenState: 'loading',
     setup: (context, data) {
