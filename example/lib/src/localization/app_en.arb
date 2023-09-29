@@ -1,0 +1,6 @@
+{
+  "appTitle": "surf_widget_test_composer_example",
+  "@appTitle": {
+    "description": "The title of the application"
+  }
+}
