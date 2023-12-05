@@ -1,0 +1,35 @@
+{
+  "appTitle": "Пример для пакета surf_widget_test_composer.",
+
+  "@segmentSampleFeature": {
+    "---------": "---------",
+    "description": "Пример фичи"
+  },
+  "sampleFeatureTitle": "Элементы для примера",
+  "sampleFeatureSampleItemTitle": "Элемент {id}",
+  "@sampleFeatureSampleItemTitle": {
+    "placeholders": {
+      "id": {
+        "type": "int"
+      }
+    }
+  },
+  "sampleFeatureItemDetailsViewTitle": "Детали элемента",
+  "sampleFeatureItemDetailsViewInfo": "Это информация о {company}",
+  "@sampleFeatureItemDetailsViewInfo": {
+    "placeholders": {
+      "company": {
+        "type": "String"
+      }
+    }
+  },
+
+  "@segmentSettings": {
+    "---------": "---------",
+    "description": "Настройки"
+  },
+  "settingsTitle": "Настройки",
+  "settingsSystemTheme": "Системная тема",
+  "settingsLightTheme": "Светлая тема",
+  "settingsDarkTheme": "Темная тема"
+}
