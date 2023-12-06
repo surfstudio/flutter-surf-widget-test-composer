@@ -27,8 +27,15 @@ jobs:
         with:
           file_path: ".fvm/fvm_config.json"
 
-  analysis:
+  generate_example_localization_files:
     needs: get_fvm_version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate example localization files
+        run: cd example && flutter gen-l10n && cd ..
+
+  analysis:
+    needs: [get_fvm_version, generate_example_localization_files]
     uses: surfstudio/flutter-ci-workflows/.github/workflows/analysis.yml@main
     with:
       flutter-version: ${{ needs.get_fvm_version.outputs.flutter_version }}
