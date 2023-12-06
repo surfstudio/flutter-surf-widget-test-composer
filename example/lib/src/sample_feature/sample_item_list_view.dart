@@ -41,10 +41,11 @@ class SampleItemListView extends StatelessWidget {
           final item = items[index];
 
           return ListTile(
-              title:
-                  Text('${context.l10n.sampleFeatureSampleItemTitle(item.id)} - ${item.company}'),
+              title: Text(
+                  '${context.l10n.sampleFeatureSampleItemTitle(item.id)} - ${item.company}'),
               leading: const CircleAvatar(
-                foregroundImage: AssetImage('assets/images/surf_flutter_team_logo.jpg'),
+                foregroundImage:
+                    AssetImage('assets/images/surf_flutter_team_logo.jpg'),
               ),
               onTap: () {
                 Navigator.pushNamed(

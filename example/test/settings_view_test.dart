@@ -12,7 +12,8 @@ void main() {
     desc: 'SettingsScreen',
     widgetBuilder: (context, _) => widget.build(context),
     setup: (context, data) {
-      when(() => context.watch<SettingsController>().themeMode).thenReturn(data);
+      when(() => context.watch<SettingsController>().themeMode)
+          .thenReturn(data);
     },
   );
 }
