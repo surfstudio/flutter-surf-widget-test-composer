@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_implementing_value_types
 import 'package:flutter/material.dart';
-import 'package:surf_widget_test_composer/utils/test_widget.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
+import 'package:surf_widget_test_composer/utils/test_widget.dart';
 
 /// Wrapper for the widget test.
 ///
@@ -40,8 +40,8 @@ class BaseWidgetTestWrapper extends StatelessWidget {
     required this.dependencies,
     this.localizations,
     this.localeOverrides,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
