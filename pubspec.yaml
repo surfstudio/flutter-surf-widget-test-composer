@@ -1,5 +1,5 @@
 name: surf_widget_test_composer
-description: Utility that simplifies widget and golden testing.
+description: Utility that simplifies golden testing.
 version: 0.0.1
 
 homepage: https://github.com/surfstudio/flutter-surf-widget-test-composer
@@ -15,8 +15,8 @@ dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  golden_toolkit: ^0.15.0
   meta: ^1.9.1
 
 dev_dependencies:
+  golden_toolkit: ^0.15.0
   flutter_lints: ^3.0.1

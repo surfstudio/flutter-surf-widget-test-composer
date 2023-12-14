@@ -14,16 +14,15 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.18.1
-  mocktail: ^1.0.1
   provider: ^6.1.1
-  surf_widget_test_composer:
-    path: ../
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   flutter_lints: ^3.0.1
+  mocktail: ^1.0.1
+  surf_widget_test_composer:
+    path: ../
 
 flutter:
   uses-material-design: true
