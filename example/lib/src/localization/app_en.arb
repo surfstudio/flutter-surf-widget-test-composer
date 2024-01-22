@@ -1,0 +1,35 @@
+{
+  "appTitle": "Example for the surf_widget_test_composer package.",
+
+  "@segmentSampleFeature": {
+    "---------": "---------",
+    "description": "Sample Feature"
+  },
+  "sampleFeatureTitle": "Sample Items",
+  "sampleFeatureSampleItemTitle": "Item {id}",
+  "@sampleFeatureSampleItemTitle": {
+    "placeholders": {
+      "id": {
+        "type": "int"
+      }
+    }
+  },
+  "sampleFeatureItemDetailsViewTitle": "Item Details",
+  "sampleFeatureItemDetailsViewInfo": "This info about {company}",
+  "@sampleFeatureItemDetailsViewInfo": {
+    "placeholders": {
+      "company": {
+        "type": "String"
+      }
+    }
+  },
+
+  "@segmentSettings": {
+    "---------": "---------",
+    "description": "Settings"
+  },
+  "settingsTitle": "Settings",
+  "settingsSystemTheme": "System Theme",
+  "settingsLightTheme": "Light Theme",
+  "settingsDarkTheme": "Dark Theme"
+}

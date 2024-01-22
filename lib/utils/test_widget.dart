@@ -52,7 +52,8 @@ void testWidget<T extends Widget>({
         final List<TestingTheme> themesForTest;
 
         // If the theme is not important for the test, the first one from the list will be used.
-        themesForTest = onlyOneTheme ? [themesForTesting.first] : themesForTesting;
+        themesForTest =
+            onlyOneTheme ? [themesForTesting.first] : themesForTesting;
 
         /// Iterate over each theme.
         for (final theme in themesForTest) {
