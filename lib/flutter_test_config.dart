@@ -31,7 +31,7 @@ late final List<LocalizationsDelegate<dynamic>>? localizationsForTesting;
 
 /// List of locales used for testing.
 @protected
-late final List<Locale>? localesForTesting;
+late final List<Locale> localesForTesting;
 
 /// Wrapper for the widget test.
 @protected
@@ -45,6 +45,9 @@ late final Color Function(ThemeData) getBackgroundColor;
 ///
 /// - [testMain] - function that contains the actual test.
 /// - [themes] - list of themes used for testing.
+/// - [localizations] - localization delegates used for testing.
+/// - [locales] - list of locales used for testing.
+/// If not provided, generate goldens only for english.
 /// - [wrapper] - wrapper for the widget test.
 /// - [backgroundColor] - background color for the golden file.
 /// - [devicesForTest] - list of devices used for testing.
@@ -56,7 +59,7 @@ Future<void> testExecutable({
   required Color Function(ThemeData) backgroundColor,
   required List<TestDevice> devicesForTest,
   List<LocalizationsDelegate<dynamic>>? localizations,
-  List<Locale>? locales,
+  List<Locale> locales = const [Locale('en')],
   LocalFileComparator? customComparator,
 }) {
   devices = devicesForTest;

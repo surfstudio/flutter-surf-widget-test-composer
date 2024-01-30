@@ -56,13 +56,11 @@ void testWidget<T extends Widget>({
         themesForTest =
             onlyOneTheme ? [themesForTesting.first] : themesForTesting;
 
-        final List<Locale>? localesForTest = localesForTesting;
-
         for (final theme in themesForTest) {
           // If the widget depends on localization and all locales should be tested.
-          if (localesForTest != null && !onlyOneLocale) {
+          if (!onlyOneLocale && localizationsForTesting != null) {
             /// Iterate over each theme.
-            for (final locale in localesForTest) {
+            for (final locale in localesForTesting) {
               /// Call setup if available.
 
               // final widget = widgetBuilder(theme.data);
@@ -105,7 +103,7 @@ void testWidget<T extends Widget>({
               }
             }
             // If the widget depends on localization and only one locale should be tested.
-          } else if (localesForTest != null && onlyOneLocale) {
+          } else if (onlyOneLocale && localizationsForTesting != null) {
             /// Call setup if available.
 
             // final widget = widgetBuilder(theme.data);
@@ -123,7 +121,7 @@ void testWidget<T extends Widget>({
                 theme.type,
                 theme.data,
                 localizationsForTesting,
-                localesForTest,
+                [localesForTesting.first],
               ),
             );
 
