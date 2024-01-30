@@ -56,54 +56,13 @@ void testWidget<T extends Widget>({
         themesForTest =
             onlyOneTheme ? [themesForTesting.first] : themesForTesting;
 
+        final List<Locale> localesForTest =
+            onlyOneLocale ? [localesForTesting.first] : localesForTesting;
+
+        /// Iterate over each theme.
         for (final theme in themesForTest) {
-          // If the widget depends on localization and all locales should be tested.
-          if (!onlyOneLocale && localizationsForTesting != null) {
-            /// Iterate over each theme.
-            for (final locale in localesForTesting) {
-              /// Call setup if available.
-
-              // final widget = widgetBuilder(theme.data);
-
-              await tester.pumpWidgetBuilder(
-                const SizedBox.shrink(),
-                wrapper: (_) => widgetWrapper(
-                  (context) {
-                    setup?.call(context, theme.type.toThemeMode);
-                    return ColoredBox(
-                      color: getBackgroundColor(theme.data),
-                      child: widgetBuilder(context, theme.type),
-                    );
-                  },
-                  theme.type,
-                  theme.data,
-                  localizationsForTesting,
-                  [locale],
-                ),
-              );
-
-              /// Call the test if available.
-              await test?.call(tester, theme.data);
-
-              if (withGolden) {
-                /// Generate golden files.
-                await multiScreenGolden(
-                  tester,
-                  _getGoldenName<T>(
-                    theme,
-                    screenState,
-                    locale: locale,
-                    includeThemeName: !onlyOneTheme,
-                  ),
-                  devices: deviceMatters ? null : [Device.phone],
-                  autoHeight: autoHeight,
-                );
-
-                await tester.pumpWidget(Container());
-              }
-            }
-            // If the widget depends on localization and only one locale should be tested.
-          } else if (onlyOneLocale && localizationsForTesting != null) {
+          /// Iterate over each locale.
+          for (final locale in localesForTest) {
             /// Call setup if available.
 
             // final widget = widgetBuilder(theme.data);
@@ -121,7 +80,7 @@ void testWidget<T extends Widget>({
                 theme.type,
                 theme.data,
                 localizationsForTesting,
-                [localesForTesting.first],
+                [locale],
               ),
             );
 
@@ -135,45 +94,7 @@ void testWidget<T extends Widget>({
                 _getGoldenName<T>(
                   theme,
                   screenState,
-                  includeThemeName: !onlyOneTheme,
-                ),
-                devices: deviceMatters ? null : [Device.phone],
-                autoHeight: autoHeight,
-              );
-
-              await tester.pumpWidget(Container());
-            }
-            // If there is no localization in project.
-          } else {
-            /// Call setup if available.
-
-            // final widget = widgetBuilder(theme.data);
-
-            await tester.pumpWidgetBuilder(
-              const SizedBox.shrink(),
-              wrapper: (_) => widgetWrapper(
-                (context) {
-                  setup?.call(context, theme.type.toThemeMode);
-                  return ColoredBox(
-                    color: getBackgroundColor(theme.data),
-                    child: widgetBuilder(context, theme.type),
-                  );
-                },
-                theme.type,
-                theme.data,
-              ),
-            );
-
-            /// Call the test if available.
-            await test?.call(tester, theme.data);
-
-            if (withGolden) {
-              /// Generate golden files.
-              await multiScreenGolden(
-                tester,
-                _getGoldenName<T>(
-                  theme,
-                  screenState,
+                  locale: localesForTest.length == 1 ? null : locale,
                   includeThemeName: !onlyOneTheme,
                 ),
                 devices: deviceMatters ? null : [Device.phone],
