@@ -8,7 +8,12 @@ import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:surf_widget_test_composer/surf_widget_test_composer.dart';
 
 typedef WidgetWrapperBuilder = BaseWidgetTestWrapper Function(
-    Widget Function(BuildContext), ThemeType, ThemeData);
+  Widget Function(BuildContext),
+  ThemeType,
+  ThemeData, [
+  List<LocalizationsDelegate<dynamic>>?,
+  List<Locale>?,
+]);
 
 const _tolerance = 0.18;
 
@@ -19,6 +24,14 @@ late final List<TestDevice> devices;
 /// List of themes used for testing.
 @protected
 late final List<TestingTheme> themesForTesting;
+
+/// List of localizations used for testing.
+@protected
+late final List<LocalizationsDelegate<dynamic>>? localizationsForTesting;
+
+/// List of locales used for testing.
+@protected
+late final List<Locale>? localesForTesting;
 
 /// Wrapper for the widget test.
 @protected
@@ -42,10 +55,14 @@ Future<void> testExecutable({
   required WidgetWrapperBuilder wrapper,
   required Color Function(ThemeData) backgroundColor,
   required List<TestDevice> devicesForTest,
+  List<LocalizationsDelegate<dynamic>>? localizations,
+  List<Locale>? locales,
   LocalFileComparator? customComparator,
 }) {
   devices = devicesForTest;
   themesForTesting = themes;
+  localizationsForTesting = localizations;
+  localesForTesting = locales;
   widgetWrapper = wrapper;
   getBackgroundColor = backgroundColor;
   return GoldenToolkit.runWithConfiguration(
