@@ -51,7 +51,8 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) {
     themes: themes,
     localizations: _localizations,
     locales: _locales,
-    wrapper: (child, mode, theme, [localizations, locales]) => BaseWidgetTestWrapper(
+    wrapper: (child, mode, theme, [localizations, locales]) =>
+        BaseWidgetTestWrapper(
       childBuilder: child,
       mode: mode,
       themeData: theme,

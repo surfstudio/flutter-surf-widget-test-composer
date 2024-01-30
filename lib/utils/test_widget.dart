@@ -145,7 +145,7 @@ void testWidget<T extends Widget>({
 
               await tester.pumpWidget(Container());
             }
-          // If there is no localization in project.
+            // If there is no localization in project.
           } else {
             /// Call setup if available.
 
