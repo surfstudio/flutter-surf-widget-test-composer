@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:surf_widget_test_composer_example/src/localization/localizations_x.dart';
 import 'package:surf_widget_test_composer_example/src/settings/settings_controller.dart';
 
@@ -8,15 +7,28 @@ import 'package:surf_widget_test_composer_example/src/settings/settings_controll
 /// When a user changes a setting, the SettingsController is updated and
 /// Widgets that listen to the SettingsController are rebuilt.
 class SettingsView extends StatelessWidget {
-  const SettingsView({super.key});
+  const SettingsView({
+    required this.settingsController,
+    super.key,
+  });
 
   static const routeName = '/settings';
+
+  final SettingsController settingsController;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.settingsTitle),
+      ),
+      floatingActionButton: InkWell(
+        onTap: () => settingsController.updateThemeMode(
+          Theme.of(context).brightness == Brightness.dark
+              ? ThemeMode.light
+              : ThemeMode.dark,
+        ),
+        child: const Icon(Icons.mode_night),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -26,9 +38,9 @@ class SettingsView extends StatelessWidget {
         // SettingsController is updated, which rebuilds the MaterialApp.
         child: DropdownButton<ThemeMode>(
           // Read the selected themeMode from the controller
-          value: context.watch<SettingsController>().themeMode,
+          value: settingsController.themeMode,
           // Call the updateThemeMode method any time the user selects a theme.
-          onChanged: context.read<SettingsController>().updateThemeMode,
+          onChanged: settingsController.updateThemeMode,
           items: [
             DropdownMenuItem(
               value: ThemeMode.system,

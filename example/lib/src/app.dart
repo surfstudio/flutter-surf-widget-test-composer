@@ -54,7 +54,9 @@ class MyApp extends StatelessWidget {
           builder: (BuildContext context) {
             switch (routeSettings.name) {
               case SettingsView.routeName:
-                return const SettingsView();
+                return SettingsView(
+                  settingsController: context.read<SettingsController>(),
+                );
               case SampleItemDetailsView.routeName:
                 final args = routeSettings.arguments as SampleItem;
                 return SampleItemDetailsView(args.company);
