@@ -64,9 +64,6 @@ void testWidget<T extends Widget>({
           /// Iterate over each locale.
           for (final locale in localesForTest) {
             /// Call setup if available.
-
-            // final widget = widgetBuilder(theme.data);
-
             await tester.pumpWidgetBuilder(
               const SizedBox.shrink(),
               wrapper: (_) => widgetWrapper(
