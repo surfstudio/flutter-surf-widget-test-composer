@@ -15,8 +15,6 @@ typedef WidgetWrapperBuilder = BaseWidgetTestWrapper Function(
   List<Locale>,
 );
 
-const _tolerance = 0.18;
-
 /// List of devices used for testing
 @protected
 late final List<TestDevice> devices;
@@ -41,6 +39,10 @@ late final WidgetWrapperBuilder widgetWrapper;
 @protected
 late final Color Function(ThemeData) getBackgroundColor;
 
+/// Tolerance for golden tests with default value 0.18.
+@protected
+late final double toleranceForTesting;
+
 /// Entry point for the widget test.
 ///
 /// - [testMain] - function that contains the actual test.
@@ -60,6 +62,7 @@ Future<void> testExecutable({
   required List<TestDevice> devicesForTest,
   List<LocalizationsDelegate<dynamic>> localizations = const [],
   List<Locale> locales = const [Locale('en')],
+  double tolerance = 0.18,
   LocalFileComparator? customComparator,
 }) {
   devices = devicesForTest;
@@ -68,6 +71,7 @@ Future<void> testExecutable({
   localesForTesting = locales;
   widgetWrapper = wrapper;
   getBackgroundColor = backgroundColor;
+  toleranceForTesting = tolerance;
   return GoldenToolkit.runWithConfiguration(
     () async {
       await loadAppFonts();
@@ -100,7 +104,7 @@ class CustomFileComparator extends LocalFileComparator {
       await getGoldenBytes(golden),
     );
 
-    if (!result.passed && result.diffPercent >= _tolerance) {
+    if (!result.passed && result.diffPercent >= toleranceForTesting) {
       final error = await generateFailureOutput(result, golden, basedir);
       throw FlutterError(error);
     }
@@ -111,6 +115,6 @@ class CustomFileComparator extends LocalFileComparator {
       );
     }
 
-    return result.passed || result.diffPercent <= _tolerance;
+    return result.passed || result.diffPercent <= toleranceForTesting;
   }
 }

@@ -67,6 +67,7 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) {
     /// You can specify background color of golden test based on current theme.
     backgroundColor: (theme) => theme.colorScheme.background,
     devicesForTest: devices,
+    tolerance: 0.5,
   );
 }
 
