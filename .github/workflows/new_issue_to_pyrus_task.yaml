@@ -8,7 +8,7 @@ on:
 
 jobs:
   call-create-pyrus-task:
-    uses: surfstudio/flutter-ci-workflows/.github/workflows/new_issue_to_pyrus_task.yml@main
+    uses: surfstudio/flutter-ci-workflows/.github/workflows/new_issue_to_pyrus_task.yml@SNP-833_create_pyrus_task_from_new_event
     with:
       PACKAGE_NAME: 'surf_widget_test_composer'
       ISSUE_TITLE: ${{ github.event.issue.title }}
