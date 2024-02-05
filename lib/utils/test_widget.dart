@@ -1,7 +1,6 @@
 // ignore_for_file: comment_references, depend_on_referenced_packages
 
 import 'package:flutter/material.dart';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:meta/meta.dart';
@@ -53,11 +52,9 @@ void testWidget<T extends Widget>({
         final List<TestingTheme> themesForTest;
 
         // If the theme is not important for the test, the first one from the list will be used.
-        themesForTest =
-            onlyOneTheme ? [themesForTesting.first] : themesForTesting;
+        themesForTest = onlyOneTheme ? [themesForTesting.first] : themesForTesting;
 
-        final List<Locale> localesForTest =
-            onlyOneLocale ? [localesForTesting.first] : localesForTesting;
+        final List<Locale> localesForTest = onlyOneLocale ? [localesForTesting.first] : localesForTesting;
 
         /// Iterate over each theme.
         for (final theme in themesForTest) {
@@ -130,7 +127,10 @@ String _getGoldenName<T>(
 
   final formattedState = state?.trim().replaceAll(' ', '_');
 
-  return '${includeThemeName ? theme.stringified : 'no_theme'}${locale == null ? '' : '.${locale.languageCode}'}${formattedState == null ? '' : '.$formattedState'}.$name';
+  return '$name.'
+      '${formattedState == null ? '' : '$formattedState.'}'
+      '${locale == null ? '' : '${locale.languageCode}.'}'
+      '${includeThemeName ? theme.stringified : 'no_theme'}';
 }
 
 enum ThemeType {
