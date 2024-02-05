@@ -8,7 +8,12 @@ import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:surf_widget_test_composer/surf_widget_test_composer.dart';
 
 typedef WidgetWrapperBuilder = BaseWidgetTestWrapper Function(
-    Widget Function(BuildContext), ThemeType, ThemeData);
+  Widget Function(BuildContext),
+  ThemeType,
+  ThemeData,
+  List<LocalizationsDelegate<dynamic>>,
+  List<Locale>,
+);
 
 /// List of devices used for testing
 @protected
@@ -17,6 +22,14 @@ late final List<TestDevice> devices;
 /// List of themes used for testing.
 @protected
 late final List<TestingTheme> themesForTesting;
+
+/// List of localizations used for testing.
+@protected
+late final List<LocalizationsDelegate<dynamic>> localizationsForTesting;
+
+/// List of locales used for testing.
+@protected
+late final List<Locale> localesForTesting;
 
 /// Wrapper for the widget test.
 @protected
@@ -34,6 +47,9 @@ late final double toleranceForTesting;
 ///
 /// - [testMain] - function that contains the actual test.
 /// - [themes] - list of themes used for testing.
+/// - [localizations] - localization delegates used for testing.
+/// - [locales] - list of locales used for testing.
+/// If not provided, generate goldens only for english.
 /// - [wrapper] - wrapper for the widget test.
 /// - [backgroundColor] - background color for the golden file.
 /// - [devicesForTest] - list of devices used for testing.
@@ -44,11 +60,15 @@ Future<void> testExecutable({
   required WidgetWrapperBuilder wrapper,
   required Color Function(ThemeData) backgroundColor,
   required List<TestDevice> devicesForTest,
+  List<LocalizationsDelegate<dynamic>> localizations = const [],
+  List<Locale> locales = const [Locale('en')],
   double tolerance = 0.18,
   LocalFileComparator? customComparator,
 }) {
   devices = devicesForTest;
   themesForTesting = themes;
+  localizationsForTesting = localizations;
+  localesForTesting = locales;
   widgetWrapper = wrapper;
   getBackgroundColor = backgroundColor;
   toleranceForTesting = tolerance;

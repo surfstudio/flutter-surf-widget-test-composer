@@ -18,12 +18,12 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) {
   /// Stringified is used for naming screenshots.
   final themes = [
     TestingTheme(
-      data: ThemeData(),
+      data: ThemeData.dark(),
       stringified: 'dark',
       type: ThemeType.dark,
     ),
     TestingTheme(
-      data: ThemeData.dark(),
+      data: ThemeData.light(),
       stringified: 'light',
       type: ThemeType.light,
     ),
@@ -49,12 +49,15 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) {
   return helper.testExecutable(
     testMain: testMain,
     themes: themes,
-    wrapper: (child, mode, theme) => BaseWidgetTestWrapper(
+    localizations: _localizations,
+    locales: _locales,
+    wrapper: (child, mode, theme, localizations, locales) =>
+        BaseWidgetTestWrapper(
       childBuilder: child,
       mode: mode,
       themeData: theme,
-      localizations: _localizationsDelegates,
-      localeOverrides: _localizations,
+      localizations: localizations,
+      localeOverrides: locales,
       dependencies: (child) => ChangeNotifierProvider<SettingsController>(
         create: (_) => settingsController,
         child: child,
@@ -68,5 +71,5 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) {
   );
 }
 
-const _localizationsDelegates = AppLocalizations.localizationsDelegates;
-const _localizations = AppLocalizations.supportedLocales;
+const _localizations = AppLocalizations.localizationsDelegates;
+const _locales = AppLocalizations.supportedLocales;

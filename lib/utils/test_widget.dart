@@ -6,9 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:meta/meta.dart';
 import 'package:surf_widget_test_composer/domain/device.dart';
-
-import '../../flutter_test_config.dart';
-import 'testing_theme.dart';
+import 'package:surf_widget_test_composer/flutter_test_config.dart';
+import 'package:surf_widget_test_composer/utils/testing_theme.dart';
 
 typedef TestFunctionWithTheme = Future Function(WidgetTester, ThemeData);
 
@@ -23,6 +22,7 @@ typedef TestFunctionWithTheme = Future Function(WidgetTester, ThemeData);
 /// - [screenState] - string that allows specifying the screen state (e.g., loading, error).
 /// - [skip] - Allows skipping the test.
 /// - [onlyOneTheme] - Uses only one of the themes for the test (the first one from the list).
+/// - [onlyOneLocale] - Uses only one of the locales for the test (the first one from the list).
 /// - [customPump] - Allows customizing the pump function.
 /// - [devices] - Allows specifying the devices for which the golden files should be generated.
 /// - [autoHeight] - Allows specifying if the height of the golden file should be automatically adjusted.
@@ -42,6 +42,7 @@ void testWidget<T extends Widget>({
   Future<void> Function(TestDevice, WidgetTester)? deviceSetup,
   List<Device>? devices,
   bool onlyOneTheme = false,
+  bool onlyOneLocale = false,
 }) =>
     testGoldens(
       desc ?? 'Golden for $T',
@@ -55,44 +56,50 @@ void testWidget<T extends Widget>({
         themesForTest =
             onlyOneTheme ? [themesForTesting.first] : themesForTesting;
 
+        final List<Locale> localesForTest =
+            onlyOneLocale ? [localesForTesting.first] : localesForTesting;
+
         /// Iterate over each theme.
         for (final theme in themesForTest) {
-          /// Call setup if available.
-
-          // final widget = widgetBuilder(theme.data);
-
-          await tester.pumpWidgetBuilder(
-            const SizedBox.shrink(),
-            wrapper: (_) => widgetWrapper(
-              (context) {
-                setup?.call(context, theme.type.toThemeMode);
-                return ColoredBox(
-                  color: getBackgroundColor(theme.data),
-                  child: widgetBuilder(context, theme.type),
-                );
-              },
-              theme.type,
-              theme.data,
-            ),
-          );
-
-          /// Call the test if available.
-          await test?.call(tester, theme.data);
-
-          if (withGolden) {
-            /// Generate golden files.
-            await multiScreenGolden(
-              tester,
-              _getGoldenName<T>(
-                theme,
-                screenState,
-                includeThemeName: !onlyOneTheme,
+          /// Iterate over each locale.
+          for (final locale in localesForTest) {
+            /// Call setup if available.
+            await tester.pumpWidgetBuilder(
+              const SizedBox.shrink(),
+              wrapper: (_) => widgetWrapper(
+                (context) {
+                  setup?.call(context, theme.type.toThemeMode);
+                  return ColoredBox(
+                    color: getBackgroundColor(theme.data),
+                    child: widgetBuilder(context, theme.type),
+                  );
+                },
+                theme.type,
+                theme.data,
+                localizationsForTesting,
+                [locale],
               ),
-              devices: deviceMatters ? null : [Device.phone],
-              autoHeight: autoHeight,
             );
 
-            await tester.pumpWidget(Container());
+            /// Call the test if available.
+            await test?.call(tester, theme.data);
+
+            if (withGolden) {
+              /// Generate golden files.
+              await multiScreenGolden(
+                tester,
+                _getGoldenName<T>(
+                  theme,
+                  screenState,
+                  locale: localesForTest.length == 1 ? null : locale,
+                  includeThemeName: !onlyOneTheme,
+                ),
+                devices: deviceMatters ? null : [Device.phone],
+                autoHeight: autoHeight,
+              );
+
+              await tester.pumpWidget(Container());
+            }
           }
         }
       },
@@ -100,15 +107,17 @@ void testWidget<T extends Widget>({
 
 /// Forms the name of the golden file from:
 /// - widget type [T] (converts camelCase to snake_case - e.g., `LoadStoreScreen` -> `load_store_screen`)
-///   - if the widget has generic parameter, it will also be converted to snake_case
+/// - if the widget has generic parameter, it will also be converted to snake_case
 /// - theme prefix (`dark_theme`/`light_theme`)
+/// - optional locale ('en', 'ru', etc.)
 /// - screen state [state], if provided (e.g., `loading`, 'loading state' -> 'loading_state')
 /// - [includeThemeName] - whether to include the theme name in the file name
 ///
-/// Example value: `dark_theme.loading.load_store_screen`
+/// Example value: `dark.en.loading.load_store_screen`
 String _getGoldenName<T>(
   TestingTheme theme,
   String? state, {
+  Locale? locale,
   bool includeThemeName = true,
 }) {
   final exp = RegExp('(?<=[a-z])[A-Z]');
@@ -121,7 +130,7 @@ String _getGoldenName<T>(
 
   final formattedState = state?.trim().replaceAll(' ', '_');
 
-  return '${includeThemeName ? theme.stringified : 'no_theme'}${formattedState == null ? '.' : '.$formattedState.'}$name';
+  return '${includeThemeName ? theme.stringified : 'no_theme'}${locale == null ? '' : '.${locale.languageCode}'}${formattedState == null ? '' : '.$formattedState'}.$name';
 }
 
 enum ThemeType {
