@@ -29,7 +29,7 @@ jobs:
 
   analysis:
     needs: get_fvm_version
-    uses: surfstudio/flutter-ci-workflows/.github/workflows/analysis.yml@SNP-744_widget_test_composer_release
+    uses: surfstudio/flutter-ci-workflows/.github/workflows/analysis.yml@main
     with:
       flutter-version: ${{ needs.get_fvm_version.outputs.flutter_version }}
 
