@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
-import 'package:surf_widget_test_composer/surf_widget_test_composer.dart';
 import 'package:surf_widget_test_composer/surf_widget_test_composer.dart'
     as helper;
+import 'package:surf_widget_test_composer/surf_widget_test_composer.dart';
+import 'package:surf_widget_test_composer_example/src/localization/app_localizations.dart';
 import 'package:surf_widget_test_composer_example/src/settings/settings_controller.dart';
 
 class MockSettingsController extends Mock implements SettingsController {}
