@@ -1,8 +1,12 @@
+<p align="center">
+<img src="./docs/images/cover.png" height="220" />
+</p>
+
 # Widget Test Composer
 
-## Description
+## Overview
 
-Utility that simplifies widget and golden testing.
+Widget Test Composer is a utility package designed to simplify widget and golden testing processes for Flutter applications. Developed by [Surf :surfer:](https://surf.dev/flutter/) Flutter team :cow2:, it offers comprehensive features to facilitate efficient testing workflows.
 
 ## Installation
 
@@ -16,43 +20,35 @@ dependencies:
 ## Getting started
 
 You need to create file `test/flutter_test_config.dart`. There you will specify:
-- themes of your app you need to test;
 - localizations of your app;
-- list of devices you want to test on.
+- themes of your app you need to test;
+- list of devices you want to test on;
+- tolerance for golden tests (the resulting [diffPercent](https://api.flutter.dev/flutter/flutter_test/ComparisonResult/diffPercent.html) must be less than the `tolerance` settings property).
 
 E.g. you have two themes: light and dark. You need to test the app on two devices: iPhone 11, Google Pixel 4a and iPhone SE 1. You need to test the app in two languages: English and Russian. You need to test your app on two locales: US and RU. You also have DI scope that you need to wrap your widget with.
 
 Then your file `test/flutter_test_config.dart` will look like this:
 
 ```dart
-import 'dart:async';
+/// Localization and locales from auto-generated AppLocalizations.
+const _localizations = AppLocalizations.localizationsDelegates;
+const _locales = AppLocalizations.supportedLocales;
 
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:your_app/assets/colors/app_color_scheme.dart';
-import 'package:your_app/assets/themes/app_theme_data.dart';
-import 'package:your_app/features/app/di/app_scope.dart';
-import 'package:your_app/features/common/widgets/di_scope/di_scope.dart';
-import 'package:surf_widget_test_composer/surf_widget_test_composer.dart';
-import 'package:surf_widget_test_composer/surf_widget_test_composer.dart' as helper;
-
-class MockAppScope extends Mock implements IAppScope {}
+class MockSettingsController extends Mock implements SettingsController {}
 
 Future<void> testExecutable(FutureOr<void> Function() testMain) {
-  final mockAppScope = MockAppScope();
+  final settingsController = MockSettingsController();
 
-    /// You can specify your own themes.
-    /// Stringified is used for naming screenshots.
+  /// You can specify your own themes.
+  /// Stringified is used for naming screenshots.
   final themes = [
     TestingTheme(
-      data: AppThemeData.dark,
+      data: ThemeData.dark(),
       stringified: 'dark',
       type: ThemeType.dark,
     ),
     TestingTheme(
-      data: AppThemeData.light,
+      data: ThemeData.light(),
       stringified: 'light',
       type: ThemeType.light,
     ),
@@ -78,88 +74,100 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) {
   return helper.testExecutable(
     testMain: testMain,
     themes: themes,
-    wrapper: (child, mode, theme) => BaseWidgetTestWrapper(
+    localizations: _localizations,
+    locales: _locales,
+    wrapper: (child, mode, theme, localizations, locales) =>
+        BaseWidgetTestWrapper(
       childBuilder: child,
       mode: mode,
       themeData: theme,
-      localizations: _localizationsDelegates,
-      localeOverrides: _localizations,
-      dependencies: (child) => DiScope<IAppScope>(
-        factory: () => mockAppScope,
+      localizations: localizations,
+      localeOverrides: locales,
+      dependencies: (child) => ChangeNotifierProvider<SettingsController>(
+        create: (_) => settingsController,
         child: child,
       ),
     ),
+
     /// You can specify background color of golden test based on current theme.
     backgroundColor: (theme) => theme.colorScheme.background,
     devicesForTest: devices,
+
+    /// You can specify tolerance for golden tests.
+    tolerance: 0.5,
   );
 }
-
-const _localizations = [
-  Locale('en', 'US'),
-  Locale('ru', 'RU'),
-];
-
-const _localizationsDelegates = [
-  AppLocalizations.delegate,
-  GlobalMaterialLocalizations.delegate,
-  GlobalWidgetsLocalizations.delegate,
-  GlobalCupertinoLocalizations.delegate,
-];
-
 ```
+
+According to the config, **12 goldens** will be generated for each test: **2 locales** x **2 themes** x **3 devises**.
+
+> For example [goldens for SampleItemListView](example/test/src/sample_feature/goldens).
 
 ## Usage
 
-**IMPORTANT**: Always specify the generic type of the widget you are testing (e.g.,`testWidget<TestableScreen>`), as the golden's name generation is based on the widget class name.
+Now we can prepare tests.
 
-## Example
-
+If in addition to gold tests you also need widget tests, then you can do something like this:
 ```dart
-class MockTestableScreenWM extends Mock implements ITestableScreenWM {}
+class MockSettingsController extends Mock implements SettingsController {}
 
 void main() {
-  final mockData = MockData('test data');
-  final widget = TestableScreen(mockData);
-  final wm = MockTestableScreenWM();
+  final mockSettingsController = MockSettingsController();
 
-  testWidget<TestableScreen>(
-    desc: 'Test screen',
-    widgetBuilder: (_, __) => widget.build(wm),
-    setup: (context, mode) {
-      when(() => wm.data).thenReturn(EntityValueNotifier(mockData));
-      when(() => wm.theme).thenReturn(Theme.of(context));
-      when(wm.onSubmitPressed).thenAnswer((_) => Future.value());
-      when(wm.onCancelPressed).thenReturn(null);
-    },
-    test: (tester, theme) async {
-        final submitButton = find.widgetWithText(PrimaryButton, CommonStrings.submitButton);
-        final cancelButton = find.widgetWithText(SecondaryButton, CommonStrings.cancelButton);
-        
-        expect(submitButton, findsOneWidget);
-        expect(cancelButton, findsOneWidget);
-        expect(finder, findsOneWidget);
-
-        await tester.tap(submitButton);
-        verify(wm.onSubmitPressed);
-
-        await tester.tap(cancelButton);
-        verify(wm.onCancelPressed);
-    },
+  final widget = SettingsView(
+    settingsController: mockSettingsController,
   );
 
-  /// Nothing to test, just want to generate the golden.
-  testWidget<TestableScreen>(
-    desc: 'Test screen - loading',
-    widgetBuilder: (_, __) => widget.build(wm),
-    /// Since we are testing a specific widget state, we fill in the [screenState] property.
-    screenState: 'loading',
+  /// Generate golden.
+  testWidget<SettingsView>(
+    desc: 'SettingsScreen',
+    widgetBuilder: (context, _) => widget.build(context),
     setup: (context, data) {
-      when(() => wm.data).thenReturn(EntityValueNotifier.loading());
-      when(() => wm.theme).thenReturn(Theme.of(context));
-    }
+      when(() => mockSettingsController.themeMode).thenReturn(ThemeMode.dark);
+      when(() => mockSettingsController.updateThemeMode(any()))
+          .thenAnswer((invocation) => Future.value());
+    },
+
+    /// Widget tests.
+    test: (tester, context) async {
+      final button = find.byType(DropdownButton<ThemeMode>);
+      expect(button, findsOneWidget);
+
+      final floatingActionButton = find.byIcon(Icons.mode_night);
+      expect(floatingActionButton, findsOneWidget);
+
+      verifyNever(() => mockSettingsController.updateThemeMode(any()));
+      await tester.tap(floatingActionButton);
+      verify(() => mockSettingsController.updateThemeMode(any()));
+    },
   );
 }
+```
+
+If you just need goldens, then the test might look like this:
+```dart
+void main() {
+  const widget = SampleItemListView();
+
+  /// Nothing to test, just want to generate the golden.
+  testWidget<SampleItemListView>(
+    desc: 'SampleItemListView - result',
+    widgetBuilder: (context, _) => widget.build(context),
+    // If we need to indicate that we are testing a specific widget/screen state,
+    // we can fill in the [screenState] field.
+    screenState: 'result',
+  );
+}
+```
+
+> [!WARNING]
+> Always specify the generic type of the widget you are testing (e.g.,`testWidget<TestableScreen>`), as the golden's name generation is based on the widget class name.
+
+## Generating goldens
+
+Don't forget to generate goldens before use:
+```sh
+flutter test --update-goldens --tags=golden
 ```
 
 ## Additional Information

@@ -9,6 +9,10 @@ import 'package:surf_widget_test_composer/surf_widget_test_composer.dart';
 import 'package:surf_widget_test_composer_example/src/localization/app_localizations.dart';
 import 'package:surf_widget_test_composer_example/src/settings/settings_controller.dart';
 
+/// Localization and locales from auto-generated AppLocalizations.
+const _localizations = AppLocalizations.localizationsDelegates;
+const _locales = AppLocalizations.supportedLocales;
+
 class MockSettingsController extends Mock implements SettingsController {}
 
 Future<void> testExecutable(FutureOr<void> Function() testMain) {
@@ -67,9 +71,8 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) {
     /// You can specify background color of golden test based on current theme.
     backgroundColor: (theme) => theme.colorScheme.background,
     devicesForTest: devices,
+
+    /// You can specify tolerance for golden tests.
     tolerance: 0.5,
   );
 }
-
-const _localizations = AppLocalizations.localizationsDelegates;
-const _locales = AppLocalizations.supportedLocales;
