@@ -27,17 +27,13 @@ void main() {
     /// Widget tests
     test: (tester, context) async {
       final button = find.byType(DropdownButton<ThemeMode>);
-
       expect(button, findsOneWidget);
 
       final floatingActionButton = find.byIcon(Icons.mode_night);
-
       expect(floatingActionButton, findsOneWidget);
 
       verifyNever(() => mockSettingsController.updateThemeMode(any()));
-
       await tester.tap(floatingActionButton);
-
       verify(() => mockSettingsController.updateThemeMode(any()));
     },
   );
