@@ -17,7 +17,9 @@ dependencies:
   surf_widget_test_composer: $currentVersion$
 ```
 
-## Getting started
+## Example
+
+### Getting started
 
 You need to create file `test/flutter_test_config.dart`. There you will specify:
 - localizations of your app;
@@ -103,7 +105,7 @@ According to the config, **12 goldens** will be generated for each test: **2 loc
 
 > For example [goldens for SampleItemListView](example/test/src/sample_feature/goldens).
 
-## Usage
+### Usage
 
 Now we can prepare tests.
 
