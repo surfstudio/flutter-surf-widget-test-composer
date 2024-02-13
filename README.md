@@ -109,7 +109,7 @@ According to the config, **12 goldens** will be generated for each test: **2 loc
 
 Now we can prepare tests.
 
-If in addition to gold tests you also need widget tests, then you can do something like this:
+If in addition to golden tests you also need widget tests, then you can make something like this:
 ```dart
 class MockSettingsController extends Mock implements SettingsController {}
 
