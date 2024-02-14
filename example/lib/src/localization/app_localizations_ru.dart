@@ -14,6 +14,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get riverpodCounterTitle => 'Счётчик на базе Riverpod';
 
   @override
+  String get elementaryCounterTitle => 'Счётчик на базе Elementary';
+
+  @override
   String get settingsTitle => 'Настройки';
 
   @override

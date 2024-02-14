@@ -13,6 +13,10 @@ class CountersScreen extends StatelessWidget {
         icon: Icons.waves,
         route: AppRoute.riverpodCounter,
       ),
+      Counter(
+        icon: Icons.grid_view,
+        route: AppRoute.elementaryCounter,
+      ),
     ],
   });
 
@@ -22,6 +26,7 @@ class CountersScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     String getTitle(BuildContext context, AppRoute route) => switch (route) {
           AppRoute.riverpodCounter => context.l10n.riverpodCounterTitle,
+          AppRoute.elementaryCounter => context.l10n.elementaryCounterTitle,
           AppRoute.settings || AppRoute.counters => 'Unexpected route',
         };
 

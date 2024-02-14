@@ -14,6 +14,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get riverpodCounterTitle => 'Counter based on Riverpod';
 
   @override
+  String get elementaryCounterTitle => 'Counter based on Elementary';
+
+  @override
   String get settingsTitle => 'Settings';
 
   @override

@@ -111,6 +111,12 @@ abstract class AppLocalizations {
   /// **'Counter based on Riverpod'**
   String get riverpodCounterTitle;
 
+  /// No description provided for @elementaryCounterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Counter based on Elementary'**
+  String get elementaryCounterTitle;
+
   /// No description provided for @settingsTitle.
   ///
   /// In en, this message translates to:
