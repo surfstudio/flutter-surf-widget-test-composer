@@ -3,7 +3,6 @@ import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:surf_widget_test_composer_example/src/counters/elementary_counter/elementary_counter_wm.dart';
 
-/// Widget for demo.
 class ElementaryCounterScreen extends ElementaryWidget<IElementaryCounterWM> {
   const ElementaryCounterScreen({
     Key? key,

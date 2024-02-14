@@ -10,7 +10,7 @@ ElementaryCounterWM testPageWidgetModelFactory(BuildContext context) {
   return ElementaryCounterWM(ElementaryCounterModel());
 }
 
-/// WidgetModel for [TestPageWidget]
+/// WidgetModel for [ElementaryCounterScreen]
 class ElementaryCounterWM
     extends WidgetModel<ElementaryCounterScreen, ElementaryCounterModel>
     implements IElementaryCounterWM {

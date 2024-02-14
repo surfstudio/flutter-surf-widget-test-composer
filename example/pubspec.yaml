@@ -13,6 +13,7 @@ dependencies:
   elementary_helper: ^1.0.1
   flutter:
     sdk: flutter
+  flutter_bloc: ^8.1.4
   flutter_localizations:
     sdk: flutter
   flutter_riverpod: 2.4.10

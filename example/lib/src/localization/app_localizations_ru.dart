@@ -17,6 +17,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get elementaryCounterTitle => 'Счётчик на базе Elementary';
 
   @override
+  String get blocCounterTitle => 'Счётчик на базе Bloc';
+
+  @override
   String get settingsTitle => 'Настройки';
 
   @override

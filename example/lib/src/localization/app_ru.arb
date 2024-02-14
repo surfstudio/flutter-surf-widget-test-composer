@@ -8,6 +8,7 @@
   "countersTitle": "Счётчики",
   "riverpodCounterTitle": "Счётчик на базе Riverpod",
   "elementaryCounterTitle": "Счётчик на базе Elementary",
+  "blocCounterTitle": "Счётчик на базе Bloc",
 
   "@segmentSettings": {
     "description": "Настройки"

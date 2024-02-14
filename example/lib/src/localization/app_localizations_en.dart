@@ -17,6 +17,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get elementaryCounterTitle => 'Counter based on Elementary';
 
   @override
+  String get blocCounterTitle => 'Counter based on Bloc';
+
+  @override
   String get settingsTitle => 'Settings';
 
   @override

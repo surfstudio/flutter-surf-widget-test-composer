@@ -117,6 +117,12 @@ abstract class AppLocalizations {
   /// **'Counter based on Elementary'**
   String get elementaryCounterTitle;
 
+  /// No description provided for @blocCounterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Counter based on Bloc'**
+  String get blocCounterTitle;
+
   /// No description provided for @settingsTitle.
   ///
   /// In en, this message translates to:

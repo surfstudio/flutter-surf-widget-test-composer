@@ -8,6 +8,7 @@
   "countersTitle": "Counters",
   "riverpodCounterTitle": "Counter based on Riverpod",
   "elementaryCounterTitle": "Counter based on Elementary",
+  "blocCounterTitle": "Counter based on Bloc",
 
   "@segmentSettings": {
     "description": "Settings"
