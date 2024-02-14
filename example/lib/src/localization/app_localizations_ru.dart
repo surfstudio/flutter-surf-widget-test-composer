@@ -2,26 +2,16 @@ import 'app_localizations.dart';
 
 /// The translations for Russian (`ru`).
 class AppLocalizationsRu extends AppLocalizations {
-  AppLocalizationsRu([super.locale = 'ru']);
+  AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
   String get appTitle => 'Пример для пакета surf_widget_test_composer.';
 
   @override
-  String get sampleFeatureTitle => 'Элементы для примера';
+  String get countersTitle => 'Счётчики';
 
   @override
-  String sampleFeatureSampleItemTitle(int id) {
-    return 'Элемент $id';
-  }
-
-  @override
-  String get sampleFeatureItemDetailsViewTitle => 'Детали элемента';
-
-  @override
-  String sampleFeatureItemDetailsViewInfo(String company) {
-    return 'Это информация о $company';
-  }
+  String get riverpodCounterTitle => 'Счётчик на базе Riverpod';
 
   @override
   String get settingsTitle => 'Настройки';
