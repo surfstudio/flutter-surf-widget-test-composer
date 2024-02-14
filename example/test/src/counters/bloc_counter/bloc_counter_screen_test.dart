@@ -9,7 +9,7 @@ void main() {
   /// Generate golden.
   testWidget<BlocCounterScreen>(
     desc: 'BlocCounterScreen',
-    widgetBuilder: (context, _) => widget.build(context),
+    widgetBuilder: (context, theme) => widget.build(context),
 
     /// Widget tests.
     test: (tester, context) async {

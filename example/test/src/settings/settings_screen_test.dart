@@ -16,7 +16,7 @@ void main() {
   /// Generate golden.
   testWidget<SettingsScreen>(
     desc: 'SettingsScreen',
-    widgetBuilder: (context, _) => ProviderScope(
+    widgetBuilder: (context, theme) => ProviderScope(
       overrides: [
         settingsServiceProvider.overrideWithValue(mockSettingsService),
       ],
@@ -24,7 +24,7 @@ void main() {
         builder: (context, ref, _) => widget.build(context, ref),
       ),
     ),
-    setup: (_, __) {
+    setup: (context, mode) {
       registerFallbackValue(ThemeMode.light);
 
       when(() => mockSettingsService.themeMode()).thenAnswer(

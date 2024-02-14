@@ -10,7 +10,7 @@ void main() {
   /// Generate golden.
   testWidget<RiverpodCounterScreen>(
     desc: 'RiverpodCounterScreen',
-    widgetBuilder: (context, _) => ProviderScope(
+    widgetBuilder: (context, theme) => ProviderScope(
       child: Consumer(
         builder: (context, ref, _) => widget.build(context, ref),
       ),

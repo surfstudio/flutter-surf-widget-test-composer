@@ -15,8 +15,8 @@ void main() {
   /// Generate golden.
   testWidget<ElementaryCounterScreen>(
     desc: 'ElementaryCounterScreen',
-    widgetBuilder: (context, _) => widget.build(wm),
-    setup: (_, __) {
+    widgetBuilder: (context, theme) => widget.build(wm),
+    setup: (context, mode) {
       when(() => wm.title).thenReturn('Elementary Counter');
       when(() => wm.value).thenReturn(StateNotifier<int>(initValue: 0));
       when(() => wm.increment()).thenReturn(null);
