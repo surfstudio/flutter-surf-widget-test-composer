@@ -36,11 +36,7 @@ Then your file `test/flutter_test_config.dart` will look like this:
 const _localizations = AppLocalizations.localizationsDelegates;
 const _locales = AppLocalizations.supportedLocales;
 
-class MockSettingsController extends Mock implements SettingsController {}
-
 Future<void> testExecutable(FutureOr<void> Function() testMain) {
-  final settingsController = MockSettingsController();
-
   /// You can specify your own themes.
   /// Stringified is used for naming screenshots.
   final themes = [
@@ -85,10 +81,8 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) {
       themeData: theme,
       localizations: localizations,
       localeOverrides: locales,
-      dependencies: (child) => ChangeNotifierProvider<SettingsController>(
-        create: (_) => settingsController,
-        child: child,
-      ),
+      // You can specify dependencies here.
+      dependencies: (child) => child,
     ),
 
     /// You can specify background color of golden test based on current theme.
@@ -111,23 +105,32 @@ Now we can prepare tests.
 
 If in addition to golden tests you also need widget tests, then you can make something like this:
 ```dart
-class MockSettingsController extends Mock implements SettingsController {}
+class MockSettingsService extends Mock implements SettingsService {}
 
 void main() {
-  final mockSettingsController = MockSettingsController();
+  final mockSettingsService = MockSettingsService();
 
-  final widget = SettingsView(
-    settingsController: mockSettingsController,
-  );
+  const widget = SettingsScreen();
 
   /// Generate golden.
-  testWidget<SettingsView>(
+  testWidget<SettingsScreen>(
     desc: 'SettingsScreen',
-    widgetBuilder: (context, _) => widget.build(context),
-    setup: (context, data) {
-      when(() => mockSettingsController.themeMode).thenReturn(ThemeMode.dark);
-      when(() => mockSettingsController.updateThemeMode(any()))
-          .thenAnswer((invocation) => Future.value());
+    widgetBuilder: (context, theme) => ProviderScope(
+      overrides: [
+        settingsServiceProvider.overrideWithValue(mockSettingsService),
+      ],
+      child: Consumer(
+        builder: (context, ref, _) => widget.build(context, ref),
+      ),
+    ),
+    setup: (context, mode) {
+      registerFallbackValue(ThemeMode.light);
+
+      when(() => mockSettingsService.themeMode()).thenAnswer(
+        (_) => Future.value(ThemeMode.dark),
+      );
+      when(() => mockSettingsService.updateThemeMode(any()))
+          .thenAnswer((_) => Future.value());
     },
 
     /// Widget tests.
@@ -135,12 +138,15 @@ void main() {
       final button = find.byType(DropdownButton<ThemeMode>);
       expect(button, findsOneWidget);
 
-      final floatingActionButton = find.byIcon(Icons.mode_night);
+      final floatingActionButton = find.byIcon(Icons.light_mode);
       expect(floatingActionButton, findsOneWidget);
 
-      verifyNever(() => mockSettingsController.updateThemeMode(any()));
+      verifyNever(() => mockSettingsService.updateThemeMode(any()));
       await tester.tap(floatingActionButton);
-      verify(() => mockSettingsController.updateThemeMode(any()));
+      verify(() => mockSettingsService.updateThemeMode(any())).called(1);
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.mode_night), findsOneWidget);
     },
   );
 }
@@ -164,6 +170,95 @@ void main() {
 
 > [!WARNING]
 > Always specify the generic type of the widget you are testing (e.g.,`testWidget<TestableScreen>`), as the golden's name generation is based on the widget class name.
+
+### Example for Elementary
+
+```dart
+class MockElementaryCounterWM extends Mock implements IElementaryCounterWM {}
+
+void main() {
+  const widget = ElementaryCounterScreen();
+  final wm = MockElementaryCounterWM();
+
+  /// Generate golden.
+  testWidget<ElementaryCounterScreen>(
+    desc: 'ElementaryCounterScreen',
+    widgetBuilder: (context, theme) => widget.build(wm),
+    setup: (context, mode) {
+      when(() => wm.title).thenReturn('Elementary Counter');
+      when(() => wm.value).thenReturn(StateNotifier<int>(initValue: 0));
+      when(() => wm.increment()).thenReturn(null);
+    },
+
+    /// Widget tests.
+    test: (tester, context) async {
+      expect(find.widgetWithText(Center, '0'), findsOneWidget);
+
+      final floatingActionButton = find.byIcon(Icons.add);
+      expect(floatingActionButton, findsOneWidget);
+
+      await tester.tap(floatingActionButton);
+      verify(wm.increment);
+    },
+  );
+}
+```
+
+### Example for Riverpod
+
+```dart
+void main() {
+  const widget = RiverpodCounterScreen();
+
+  /// Generate golden.
+  testWidget<RiverpodCounterScreen>(
+    desc: 'RiverpodCounterScreen',
+    widgetBuilder: (context, theme) => ProviderScope(
+      child: Consumer(
+        builder: (context, ref, _) => widget.build(context, ref),
+      ),
+    ),
+
+    /// Widget tests.
+    test: (tester, context) async {
+      expect(find.widgetWithText(Center, '0'), findsOneWidget);
+
+      final floatingActionButton = find.byIcon(Icons.add);
+      expect(floatingActionButton, findsOneWidget);
+
+      await tester.tap(floatingActionButton);
+      await tester.pumpAndSettle();
+      expect(find.widgetWithText(Center, '1'), findsOneWidget);
+    },
+  );
+}
+```
+
+### Example for BLoC
+
+```dart
+void main() {
+  const widget = BlocCounterScreen();
+
+  /// Generate golden.
+  testWidget<BlocCounterScreen>(
+    desc: 'BlocCounterScreen',
+    widgetBuilder: (context, theme) => widget.build(context),
+
+    /// Widget tests.
+    test: (tester, context) async {
+      expect(find.widgetWithText(Center, '0'), findsOneWidget);
+
+      final floatingActionButton = find.byIcon(Icons.add);
+      expect(floatingActionButton, findsOneWidget);
+
+      await tester.tap(floatingActionButton);
+      await tester.pumpAndSettle();
+      expect(find.widgetWithText(Center, '1'), findsOneWidget);
+    },
+  );
+}
+```
 
 ## Generating goldens
 
