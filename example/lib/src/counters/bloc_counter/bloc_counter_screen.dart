@@ -13,13 +13,13 @@ class BlocCounterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => bloc,
-      child: const BlocCounterView(),
+      child: const _BlocCounterView(),
     );
   }
 }
 
-class BlocCounterView extends StatelessWidget {
-  const BlocCounterView({super.key});
+class _BlocCounterView extends StatelessWidget {
+  const _BlocCounterView();
 
   @override
   Widget build(BuildContext context) {
