@@ -5,19 +5,21 @@ import 'package:surf_widget_test_composer_example/src/counters/bloc_counter/bloc
 import 'package:surf_widget_test_composer_example/src/localization/localizations_x.dart';
 
 class BlocCounterScreen extends StatelessWidget {
-  const BlocCounterScreen({super.key});
+  final BlocCounterBloc bloc;
+
+  const BlocCounterScreen({required this.bloc, super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => BlocCounterBloc(),
-      child: const _CounterView(),
+      create: (_) => bloc,
+      child: const BlocCounterView(),
     );
   }
 }
 
-class _CounterView extends StatelessWidget {
-  const _CounterView();
+class BlocCounterView extends StatelessWidget {
+  const BlocCounterView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +27,13 @@ class _CounterView extends StatelessWidget {
       appBar: AppBar(title: Text(context.l10n.blocCounterTitle)),
       body: Center(
         child: BlocBuilder<BlocCounterBloc, int>(
-          builder: (context, state) => Text('$state'),
+          builder: (context, state) => Text(
+            '$state',
+            style: const TextStyle(fontSize: 36),
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        key: const Key('blocCounterScreen_increment_floatingActionButton'),
         child: const Icon(Icons.add),
         onPressed: () => context.read<BlocCounterBloc>().add(Increment()),
       ),

@@ -1,26 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:surf_widget_test_composer/surf_widget_test_composer.dart';
+import 'package:surf_widget_test_composer_example/src/counters/bloc_counter/bloc_counter_bloc.dart';
+import 'package:surf_widget_test_composer_example/src/counters/bloc_counter/bloc_counter_event.dart';
 import 'package:surf_widget_test_composer_example/src/counters/bloc_counter/bloc_counter_screen.dart';
 
+class MockBlocCounterBloc extends Mock implements BlocCounterBloc {}
+
 void main() {
-  const widget = BlocCounterScreen();
+  const int value = 5;
+  final mockBloc = MockBlocCounterBloc();
+  final widget = BlocCounterScreen(bloc: mockBloc);
 
   /// Generate golden.
   testWidget<BlocCounterScreen>(
     desc: 'BlocCounterScreen',
     widgetBuilder: (context, theme) => widget.build(context),
 
+    setup: (context, mode) {
+      when(() => mockBloc.state).thenReturn(value);
+      when(() => mockBloc.stream).thenAnswer(
+        (_) => Stream<int>.fromIterable([value]),
+      );
+      when(() => mockBloc.add(Increment())).thenAnswer((_) => Future.value());
+      when(() => mockBloc.close()).thenAnswer((_) => Future.value());
+    },
+
     /// Widget tests.
     test: (tester, context) async {
-      expect(find.widgetWithText(Center, '0'), findsOneWidget);
+      expect(find.widgetWithText(Center, value.toString()), findsOneWidget);
 
       final floatingActionButton = find.byIcon(Icons.add);
       expect(floatingActionButton, findsOneWidget);
 
       await tester.tap(floatingActionButton);
-      await tester.pumpAndSettle();
-      expect(find.widgetWithText(Center, '1'), findsOneWidget);
+      verify(() => mockBloc.add(Increment())).called(1);
     },
   );
 }

@@ -15,7 +15,10 @@ class RiverpodCounterScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.riverpodCounterTitle)),
       body: Center(
-        child: Text(state.toString()),
+        child: Text(
+          state.toString(),
+          style: const TextStyle(fontSize: 36),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => controller.increment(),

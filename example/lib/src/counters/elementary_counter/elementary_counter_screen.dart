@@ -17,7 +17,10 @@ class ElementaryCounterScreen extends ElementaryWidget<IElementaryCounterWM> {
         child: StateNotifierBuilder<int>(
           listenableState: wm.value,
           builder: (_, value) {
-            return Text(value.toString());
+            return Text(
+              value.toString(),
+              style: const TextStyle(fontSize: 36),
+            );
           },
         ),
       ),

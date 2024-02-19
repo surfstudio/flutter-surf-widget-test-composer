@@ -1,3 +1,8 @@
-abstract class BlocCounterEvent {}
+import 'package:equatable/equatable.dart';
 
-class Increment extends BlocCounterEvent {}
+abstract class BlocCounterEvent extends Equatable {}
+
+class Increment extends BlocCounterEvent {
+  @override
+  List<Object?> get props => [];
+}

@@ -9,16 +9,18 @@ environment:
   sdk: '>=3.1.2 <4.0.0'
 
 dependencies:
-  elementary: ^3.0.0
-  elementary_helper: ^1.0.1
+  elementary: 3.0.0
+  elementary_helper: 1.0.1
+  equatable: 2.0.5
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.1.4
+  flutter_bloc: 8.1.4
   flutter_localizations:
     sdk: flutter
   flutter_riverpod: 2.4.10
   go_router: 13.2.0
   intl: 0.18.1
+  mocktail: 1.0.3
   riverpod_annotation: 2.3.4
 
 dev_dependencies:
@@ -26,7 +28,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: 3.0.1
-  mocktail: 1.0.3
   riverpod_generator: 2.3.11
   riverpod_lint: 2.3.9
   surf_widget_test_composer:

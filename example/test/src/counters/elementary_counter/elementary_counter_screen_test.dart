@@ -9,6 +9,7 @@ import 'package:surf_widget_test_composer_example/src/counters/elementary_counte
 class MockElementaryCounterWM extends Mock implements IElementaryCounterWM {}
 
 void main() {
+  const int value = 5;
   const widget = ElementaryCounterScreen();
   final wm = MockElementaryCounterWM();
 
@@ -18,13 +19,13 @@ void main() {
     widgetBuilder: (context, theme) => widget.build(wm),
     setup: (context, mode) {
       when(() => wm.title).thenReturn('Elementary Counter');
-      when(() => wm.value).thenReturn(StateNotifier<int>(initValue: 0));
+      when(() => wm.value).thenReturn(StateNotifier<int>(initValue: value));
       when(() => wm.increment()).thenReturn(null);
     },
 
     /// Widget tests.
     test: (tester, context) async {
-      expect(find.widgetWithText(Center, '0'), findsOneWidget);
+      expect(find.widgetWithText(Center, value.toString()), findsOneWidget);
 
       final floatingActionButton = find.byIcon(Icons.add);
       expect(floatingActionButton, findsOneWidget);
