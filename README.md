@@ -2,11 +2,9 @@
 <img src="./docs/images/cover.png" height="220" />
 </p>
 
-# Widget Test Composer
-
 ## Description
 
-Widget Test Composer is a utility package designed to simplify widget and golden testing processes for Flutter applications. Developed by [Surf :surfer:](https://surf.dev/flutter/) Flutter team :cow2:, it offers comprehensive features to facilitate efficient testing workflows.
+Widget Test Composer is a utility package designed to simplify widget and golden testing processes using [golden_toolkit](https://pub.dev/packages/golden_toolkit) package for Flutter applications. Developed by [Surf :surfer:](https://surf.dev/flutter/) Flutter team :cow2:, it offers comprehensive features to facilitate efficient testing workflows.
 
 ## Installation
 
