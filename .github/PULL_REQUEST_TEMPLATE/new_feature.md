@@ -1,14 +1,8 @@
----
-name: New feature
-labels: enhancement
----
-
 <!--
     Thank you for contributing to our project!
     Provide a description of your changes below and a general summary in the title.
     Please look at the following checklist to ensure that your PR can be accepted quickly:
 -->
-
 ## Checklist
 
 - [ ] Have you added an explanation of what your changes do and why you'd like us to include them?
