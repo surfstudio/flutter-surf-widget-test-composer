@@ -4,22 +4,33 @@ import 'package:surf_widget_test_composer_example/src/counters/bloc_counter/bloc
 import 'package:surf_widget_test_composer_example/src/counters/bloc_counter/bloc_counter_event.dart';
 import 'package:surf_widget_test_composer_example/src/localization/localizations_x.dart';
 
-class BlocCounterScreen extends StatelessWidget {
-  final BlocCounterBloc bloc;
+class BlocCounterScreen extends StatefulWidget {
+  const BlocCounterScreen({super.key});
 
-  const BlocCounterScreen({required this.bloc, super.key});
+  @override
+  State<BlocCounterScreen> createState() => _BlocCounterScreenState();
+}
+
+class _BlocCounterScreenState extends State<BlocCounterScreen> {
+  final bloc = BlocCounterBloc();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => bloc,
-      child: const _BlocCounterView(),
+      child: const BlocCounterView(),
     );
+  }
+
+  @override
+  void dispose() {
+    bloc.close();
+    super.dispose();
   }
 }
 
-class _BlocCounterView extends StatelessWidget {
-  const _BlocCounterView();
+class BlocCounterView extends StatelessWidget {
+  const BlocCounterView({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:surf_widget_test_composer/surf_widget_test_composer.dart';
@@ -11,12 +12,17 @@ class MockBlocCounterBloc extends Mock implements BlocCounterBloc {}
 void main() {
   const int value = 5;
   final mockBloc = MockBlocCounterBloc();
-  final widget = BlocCounterScreen(bloc: mockBloc);
+  const widget = BlocCounterView();
 
   /// Generate golden.
-  testWidget<BlocCounterScreen>(
-    desc: 'BlocCounterScreen',
-    widgetBuilder: (context, theme) => widget.build(context),
+  testWidget<BlocCounterView>(
+    desc: 'BlocCounterView',
+    widgetBuilder: (context, theme) => MultiBlocProvider(
+      providers: [
+        BlocProvider<BlocCounterBloc>(create: (_) => mockBloc),
+      ],
+      child: widget,
+    ),
 
     setup: (context, mode) {
       when(() => mockBloc.state).thenReturn(value);
