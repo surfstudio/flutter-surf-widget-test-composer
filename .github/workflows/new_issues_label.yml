@@ -14,3 +14,4 @@ jobs:
     uses: surfstudio/flutter-ci-workflows/.github/workflows/new_issues_label.yml@main
     secrets:
       SECRET_ISSUES: ${{ secrets.ACCESS_TOKEN_FOR_SURFGEAR }}
+
