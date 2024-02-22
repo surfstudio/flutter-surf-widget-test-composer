@@ -11,6 +11,7 @@ on:
 
 jobs:
   label_pull_request:
+    if: ${{ github.event.label.name == 'WIP' }}
     uses: surfstudio/flutter-ci-workflows/.github/workflows/new_pull_request_label.yml@main
     secrets:
       SECRET_ISSUES: ${{ secrets.ACCESS_TOKEN_FOR_SURFGEAR }}
