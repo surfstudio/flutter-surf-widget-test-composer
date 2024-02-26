@@ -6,7 +6,7 @@
 ## Checklist
 
 - [ ] Is there an existing issue for this PR?
-  - _link issue here_
+  - _link issue here_ (use keywords like `fix`, `close`, `resolve` etc. if necessary)
 - [ ] Have the files been linted and formatted?
 
 ## Changes
