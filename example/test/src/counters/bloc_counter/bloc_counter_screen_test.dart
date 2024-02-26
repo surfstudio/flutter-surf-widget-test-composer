@@ -10,7 +10,7 @@ import 'package:surf_widget_test_composer_example/src/counters/bloc_counter/bloc
 class MockBlocCounterBloc extends Mock implements BlocCounterBloc {}
 
 void main() {
-  const int value = 5;
+  const int testValue = 5;
   final mockBloc = MockBlocCounterBloc();
   const widget = BlocCounterView();
 
@@ -25,9 +25,9 @@ void main() {
     ),
 
     setup: (context, mode) {
-      when(() => mockBloc.state).thenReturn(value);
+      when(() => mockBloc.state).thenReturn(testValue);
       when(() => mockBloc.stream).thenAnswer(
-        (_) => Stream<int>.fromIterable([value]),
+        (_) => Stream<int>.fromIterable([testValue]),
       );
       when(() => mockBloc.add(Increment())).thenAnswer((_) => Future.value());
       when(() => mockBloc.close()).thenAnswer((_) => Future.value());
@@ -35,7 +35,7 @@ void main() {
 
     /// Widget tests.
     test: (tester, context) async {
-      expect(find.widgetWithText(Center, value.toString()), findsOneWidget);
+      expect(find.widgetWithText(Center, testValue.toString()), findsOneWidget);
 
       final floatingActionButton = find.byIcon(Icons.add);
       expect(floatingActionButton, findsOneWidget);

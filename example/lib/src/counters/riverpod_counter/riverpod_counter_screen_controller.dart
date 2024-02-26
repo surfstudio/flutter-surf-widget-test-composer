@@ -1,4 +1,3 @@
-import 'package:mocktail/mocktail.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'riverpod_counter_screen_controller.g.dart';
@@ -18,15 +17,4 @@ class RiverpodCounterScreenController
   int build() => 0;
 
   void increment() => state++;
-}
-
-// Mock for tests.
-class MockRiverpodCounterScreenController
-    extends _$RiverpodCounterScreenController
-    with Mock
-    implements RiverpodCounterScreenController {
-  final int initialState;
-  MockRiverpodCounterScreenController(this.initialState);
-  @override
-  int build() => initialState;
 }
