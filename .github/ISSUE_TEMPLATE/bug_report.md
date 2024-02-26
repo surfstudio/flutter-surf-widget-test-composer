@@ -1,13 +1,13 @@
 ---
 name: Bug report
-about: Something is wrong with widget test composer.
+about: Something is wrong.
 title: "[BUG] "
 labels: bug
 ---
-
-## Specify package name
-<!--Write the name of the package where you have problems-->
-
+<!--
+    Thank you for contributing to our project!
+    This template is only for bugfix reports, otherwise please use another template.
+-->
 ## Expected behavior
 <!--Tell us what should happen-->
 
