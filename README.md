@@ -175,6 +175,7 @@ void main() {
 class MockElementaryCounterWM extends Mock implements IElementaryCounterWM {}
 
 void main() {
+  const int testValue = 5;
   const widget = ElementaryCounterScreen();
   final wm = MockElementaryCounterWM();
 
@@ -184,13 +185,13 @@ void main() {
     widgetBuilder: (context, theme) => widget.build(wm),
     setup: (context, mode) {
       when(() => wm.title).thenReturn('Elementary Counter');
-      when(() => wm.value).thenReturn(StateNotifier<int>(initValue: 0));
+      when(() => wm.value).thenReturn(StateNotifier<int>(initValue: testValue));
       when(() => wm.increment()).thenReturn(null);
     },
 
     /// Widget tests.
     test: (tester, context) async {
-      expect(find.widgetWithText(Center, '0'), findsOneWidget);
+      expect(find.widgetWithText(Center, testValue.toString()), findsOneWidget);
 
       final floatingActionButton = find.byIcon(Icons.add);
       expect(floatingActionButton, findsOneWidget);
@@ -205,28 +206,46 @@ void main() {
 ### Example for Riverpod
 
 ```dart
+class MockRiverpodCounterScreenController extends AutoDisposeNotifier<int>
+    with Mock
+    implements RiverpodCounterScreenController {}
+
 void main() {
+  const int testValue = 5;
   const widget = RiverpodCounterScreen();
+  final mockController = MockRiverpodCounterScreenController();
+
+  final container = ProviderContainer(
+    overrides: [
+      riverpodCounterScreenControllerProvider
+          .overrideWith(() => mockController),
+    ],
+  );
 
   /// Generate golden.
   testWidget<RiverpodCounterScreen>(
     desc: 'RiverpodCounterScreen',
-    widgetBuilder: (context, theme) => ProviderScope(
+    widgetBuilder: (context, theme) => UncontrolledProviderScope(
+      container: container,
       child: Consumer(
         builder: (context, ref, _) => widget.build(context, ref),
       ),
     ),
 
+    setup: (context, mode) {
+      when(() => mockController.build()).thenReturn(testValue);
+      when(() => mockController.increment()).thenReturn(null);
+    },
+
     /// Widget tests.
     test: (tester, context) async {
-      expect(find.widgetWithText(Center, '0'), findsOneWidget);
+      expect(find.widgetWithText(Center, testValue.toString()), findsOneWidget);
 
       final floatingActionButton = find.byIcon(Icons.add);
       expect(floatingActionButton, findsOneWidget);
 
       await tester.tap(floatingActionButton);
-      await tester.pumpAndSettle();
-      expect(find.widgetWithText(Center, '1'), findsOneWidget);
+      verify(() => mockController.increment()).called(1);
     },
   );
 }
@@ -235,24 +254,41 @@ void main() {
 ### Example for BLoC
 
 ```dart
+class MockBlocCounterBloc extends Mock implements BlocCounterBloc {}
+
 void main() {
-  const widget = BlocCounterScreen();
+  const int testValue = 5;
+  final mockBloc = MockBlocCounterBloc();
+  const widget = BlocCounterView();
 
   /// Generate golden.
-  testWidget<BlocCounterScreen>(
-    desc: 'BlocCounterScreen',
-    widgetBuilder: (context, theme) => widget.build(context),
+  testWidget<BlocCounterView>(
+    desc: 'BlocCounterView',
+    widgetBuilder: (context, theme) => MultiBlocProvider(
+      providers: [
+        BlocProvider<BlocCounterBloc>(create: (_) => mockBloc),
+      ],
+      child: widget,
+    ),
+
+    setup: (context, mode) {
+      when(() => mockBloc.state).thenReturn(testValue);
+      when(() => mockBloc.stream).thenAnswer(
+        (_) => Stream<int>.fromIterable([testValue]),
+      );
+      when(() => mockBloc.add(Increment())).thenAnswer((_) => Future.value());
+      when(() => mockBloc.close()).thenAnswer((_) => Future.value());
+    },
 
     /// Widget tests.
     test: (tester, context) async {
-      expect(find.widgetWithText(Center, '0'), findsOneWidget);
+      expect(find.widgetWithText(Center, testValue.toString()), findsOneWidget);
 
       final floatingActionButton = find.byIcon(Icons.add);
       expect(floatingActionButton, findsOneWidget);
 
       await tester.tap(floatingActionButton);
-      await tester.pumpAndSettle();
-      expect(find.widgetWithText(Center, '1'), findsOneWidget);
+      verify(() => mockBloc.add(Increment())).called(1);
     },
   );
 }
@@ -269,7 +305,7 @@ flutter test --update-goldens --tags=golden
 
 While testing, you can face the following errors:
 ```sh
-00:05 +0: WHEN tasks are not completedTHEN shows `CircularProgressIndicator`                                                                                                                                
+00:05 +0: WHEN tasks are not completedTHEN shows `CircularProgressIndicator`
 ══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
 The following assertion was thrown while running async test code:
 pumpAndSettle timed out
