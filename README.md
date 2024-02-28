@@ -35,7 +35,6 @@ import 'package:your_app/assets/colors/app_color_scheme.dart';
 import 'package:your_app/assets/themes/app_theme_data.dart';
 import 'package:your_app/features/app/di/app_scope.dart';
 import 'package:your_app/features/common/widgets/di_scope/di_scope.dart';
-import 'package:surf_widget_test_composer/surf_widget_test_composer.dart';
 import 'package:surf_widget_test_composer/surf_widget_test_composer.dart' as helper;
 
 class MockAppScope extends Mock implements IAppScope {}
@@ -46,12 +45,12 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) {
     /// You can specify your own themes.
     /// Stringified is used for naming screenshots.
   final themes = [
-    TestingTheme(
+    helper.TestingTheme(
       data: AppThemeData.dark,
       stringified: 'dark',
       type: ThemeType.dark,
     ),
-    TestingTheme(
+    helper.TestingTheme(
       data: AppThemeData.light,
       stringified: 'light',
       type: ThemeType.light,
@@ -60,16 +59,16 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) {
 
   /// You can specify your own devices.
   final devices = [
-    TestDevice(
+    helper.TestDevice(
       name: 'iphone11',
       size: const Size(414, 896),
       safeArea: const EdgeInsets.only(top: 44, bottom: 34),
     ),
-    TestDevice(
+    helper.TestDevice(
       name: 'pixel 4a',
       size: const Size(393, 851),
     ),
-    TestDevice(
+    helper.TestDevice(
       name: 'iphone_se_1',
       size: const Size(640 / 2, 1136 / 2),
     ),
@@ -78,7 +77,7 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) {
   return helper.testExecutable(
     testMain: testMain,
     themes: themes,
-    wrapper: (child, mode, theme) => BaseWidgetTestWrapper(
+    wrapper: (child, mode, theme, localizations, locales) => helper.BaseWidgetTestWrapper(
       childBuilder: child,
       mode: mode,
       themeData: theme,
