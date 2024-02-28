@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
-import 'package:surf_widget_test_composer/surf_widget_test_composer.dart' as helper;
+import 'package:surf_widget_test_composer/surf_widget_test_composer.dart'
+    as helper;
 import 'package:surf_widget_test_composer_example/src/localization/app_localizations.dart';
 import 'package:surf_widget_test_composer_example/src/settings/settings_controller.dart';
 
@@ -49,7 +50,8 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) {
     themes: themes,
     localizations: _localizations,
     locales: _locales,
-    wrapper: (child, mode, theme, localizations, locales) => helper.BaseWidgetTestWrapper(
+    wrapper: (child, mode, theme, localizations, locales) =>
+        helper.BaseWidgetTestWrapper(
       childBuilder: child,
       mode: mode,
       themeData: theme,
