@@ -102,29 +102,29 @@ abstract class AppLocalizations {
   /// **'Example for the surf_widget_test_composer package.'**
   String get appTitle;
 
-  /// No description provided for @sampleFeatureTitle.
+  /// No description provided for @countersTitle.
   ///
   /// In en, this message translates to:
-  /// **'Sample Items'**
-  String get sampleFeatureTitle;
+  /// **'Counters'**
+  String get countersTitle;
 
-  /// No description provided for @sampleFeatureSampleItemTitle.
+  /// No description provided for @riverpodCounterTitle.
   ///
   /// In en, this message translates to:
-  /// **'Item {id}'**
-  String sampleFeatureSampleItemTitle(int id);
+  /// **'Counter based on Riverpod'**
+  String get riverpodCounterTitle;
 
-  /// No description provided for @sampleFeatureItemDetailsViewTitle.
+  /// No description provided for @elementaryCounterTitle.
   ///
   /// In en, this message translates to:
-  /// **'Item Details'**
-  String get sampleFeatureItemDetailsViewTitle;
+  /// **'Counter based on Elementary'**
+  String get elementaryCounterTitle;
 
-  /// No description provided for @sampleFeatureItemDetailsViewInfo.
+  /// No description provided for @blocCounterTitle.
   ///
   /// In en, this message translates to:
-  /// **'This info about {company}'**
-  String sampleFeatureItemDetailsViewInfo(String company);
+  /// **'Counter based on Bloc'**
+  String get blocCounterTitle;
 
   /// No description provided for @settingsTitle.
   ///

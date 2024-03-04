@@ -8,20 +8,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Example for the surf_widget_test_composer package.';
 
   @override
-  String get sampleFeatureTitle => 'Sample Items';
+  String get countersTitle => 'Counters';
 
   @override
-  String sampleFeatureSampleItemTitle(int id) {
-    return 'Item $id';
-  }
+  String get riverpodCounterTitle => 'Counter based on Riverpod';
 
   @override
-  String get sampleFeatureItemDetailsViewTitle => 'Item Details';
+  String get elementaryCounterTitle => 'Counter based on Elementary';
 
   @override
-  String sampleFeatureItemDetailsViewInfo(String company) {
-    return 'This info about $company';
-  }
+  String get blocCounterTitle => 'Counter based on Bloc';
 
   @override
   String get settingsTitle => 'Settings';

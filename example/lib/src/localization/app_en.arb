@@ -1,31 +1,16 @@
 {
+  "@@locale": "en",
   "appTitle": "Example for the surf_widget_test_composer package.",
 
-  "@segmentSampleFeature": {
-    "---------": "---------",
-    "description": "Sample Feature"
+  "@segmentCounters": {
+    "description": "Strings for example counters"
   },
-  "sampleFeatureTitle": "Sample Items",
-  "sampleFeatureSampleItemTitle": "Item {id}",
-  "@sampleFeatureSampleItemTitle": {
-    "placeholders": {
-      "id": {
-        "type": "int"
-      }
-    }
-  },
-  "sampleFeatureItemDetailsViewTitle": "Item Details",
-  "sampleFeatureItemDetailsViewInfo": "This info about {company}",
-  "@sampleFeatureItemDetailsViewInfo": {
-    "placeholders": {
-      "company": {
-        "type": "String"
-      }
-    }
-  },
+  "countersTitle": "Counters",
+  "riverpodCounterTitle": "Counter based on Riverpod",
+  "elementaryCounterTitle": "Counter based on Elementary",
+  "blocCounterTitle": "Counter based on Bloc",
 
   "@segmentSettings": {
-    "---------": "---------",
     "description": "Settings"
   },
   "settingsTitle": "Settings",

@@ -1,19 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:provider/provider.dart';
 import 'package:surf_widget_test_composer/surf_widget_test_composer.dart'
     as helper;
 import 'package:surf_widget_test_composer/surf_widget_test_composer.dart';
 import 'package:surf_widget_test_composer_example/src/localization/app_localizations.dart';
-import 'package:surf_widget_test_composer_example/src/settings/settings_controller.dart';
 
-class MockSettingsController extends Mock implements SettingsController {}
+/// Localization and locales from auto-generated AppLocalizations.
+const _localizations = AppLocalizations.localizationsDelegates;
+const _locales = AppLocalizations.supportedLocales;
 
 Future<void> testExecutable(FutureOr<void> Function() testMain) {
-  final settingsController = MockSettingsController();
-
   /// You can specify your own themes.
   /// Stringified is used for naming screenshots.
   final themes = [
@@ -58,18 +55,15 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) {
       themeData: theme,
       localizations: localizations,
       localeOverrides: locales,
-      dependencies: (child) => ChangeNotifierProvider<SettingsController>(
-        create: (_) => settingsController,
-        child: child,
-      ),
+      // You can specify dependencies here.
+      dependencies: (child) => child,
     ),
 
     /// You can specify background color of golden test based on current theme.
     backgroundColor: (theme) => theme.colorScheme.background,
     devicesForTest: devices,
+
+    /// You can specify tolerance for golden tests.
     tolerance: 0.5,
   );
 }
-
-const _localizations = AppLocalizations.localizationsDelegates;
-const _locales = AppLocalizations.supportedLocales;

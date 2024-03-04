@@ -1,31 +1,16 @@
 {
+  "@@locale": "ru",
   "appTitle": "Пример для пакета surf_widget_test_composer.",
 
-  "@segmentSampleFeature": {
-    "---------": "---------",
-    "description": "Пример фичи"
+  "@segmentCounters": {
+    "description": "Строки для примеров счётчиков"
   },
-  "sampleFeatureTitle": "Элементы для примера",
-  "sampleFeatureSampleItemTitle": "Элемент {id}",
-  "@sampleFeatureSampleItemTitle": {
-    "placeholders": {
-      "id": {
-        "type": "int"
-      }
-    }
-  },
-  "sampleFeatureItemDetailsViewTitle": "Детали элемента",
-  "sampleFeatureItemDetailsViewInfo": "Это информация о {company}",
-  "@sampleFeatureItemDetailsViewInfo": {
-    "placeholders": {
-      "company": {
-        "type": "String"
-      }
-    }
-  },
+  "countersTitle": "Счётчики",
+  "riverpodCounterTitle": "Счётчик на базе Riverpod",
+  "elementaryCounterTitle": "Счётчик на базе Elementary",
+  "blocCounterTitle": "Счётчик на базе Bloc",
 
   "@segmentSettings": {
-    "---------": "---------",
     "description": "Настройки"
   },
   "settingsTitle": "Настройки",
