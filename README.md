@@ -30,6 +30,9 @@ E.g. you have two themes: light and dark. You need to test the app on two device
 Then your file `test/flutter_test_config.dart` will look like this:
 
 ```dart
+import 'package:surf_widget_test_composer/surf_widget_test_composer.dart'
+    as helper;
+
 /// Localization and locales from auto-generated AppLocalizations.
 const _localizations = AppLocalizations.localizationsDelegates;
 const _locales = AppLocalizations.supportedLocales;

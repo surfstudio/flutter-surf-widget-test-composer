@@ -7,6 +7,7 @@ import 'package:meta/meta.dart';
 import 'package:surf_widget_test_composer/domain/device.dart';
 import 'package:surf_widget_test_composer/flutter_test_config.dart';
 import 'package:surf_widget_test_composer/utils/testing_theme.dart';
+import 'package:collection/collection.dart';
 
 typedef TestFunctionWithTheme = Future Function(WidgetTester, ThemeData);
 
@@ -49,14 +50,24 @@ void testWidget<T extends Widget>({
       (tester) async {
         await loadAppFonts();
 
-        final List<TestingTheme> themesForTest;
-
         // If the theme is not important for the test, the first one from the list will be used.
-        themesForTest =
-            onlyOneTheme ? [themesForTesting.first] : themesForTesting;
+        final themesForTest = onlyOneTheme
+            ? [themesForTesting.firstOrNull].whereNotNull()
+            : themesForTesting;
 
-        final List<Locale> localesForTest =
-            onlyOneLocale ? [localesForTesting.first] : localesForTesting;
+        final localesForTest = onlyOneLocale
+            ? [localesForTesting.firstOrNull].whereNotNull()
+            : localesForTesting;
+
+        assert(
+          themesForTest.isNotEmpty,
+          'At least one theme should be provided for the test.',
+        );
+
+        assert(
+          localesForTest.isNotEmpty,
+          'At least one locale should be provided for the test.',
+        );
 
         /// Iterate over each theme.
         for (final theme in themesForTest) {
@@ -133,20 +144,4 @@ String _getGoldenName<T>(
       '${formattedState == null ? '' : '$formattedState.'}'
       '${locale == null ? '' : '${locale.languageCode}.'}'
       '${includeThemeName ? theme.stringified : 'no_theme'}';
-}
-
-enum ThemeType {
-  dark,
-  light;
-
-  ThemeMode get toThemeMode {
-    switch (this) {
-      case ThemeType.dark:
-        return ThemeMode.dark;
-      case ThemeType.light:
-        return ThemeMode.light;
-    }
-  }
-
-  const ThemeType();
 }
