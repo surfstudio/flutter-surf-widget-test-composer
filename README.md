@@ -1,5 +1,5 @@
 <p align="center">
-<img src="./doc/images/cover.png" height="220" />
+<img src="https://github.com/surfstudio/flutter-surf-widget-test-composer/blob/main/doc/images/cover.png?raw=true" height="220" />
 </p>
 
 ## Description
@@ -95,7 +95,7 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) {
 
 According to the config, **12 goldens** will be generated for each test: **2 locales** x **2 themes** x **3 devises**.
 
-> For example [goldens for SampleItemListView](example/test/src/sample_feature/goldens).
+> For example [goldens for SampleItemListView](example/test/src/settings/goldens).
 
 ### Usage
 
