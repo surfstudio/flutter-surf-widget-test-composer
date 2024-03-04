@@ -1,7 +1,6 @@
 // ignore_for_file: comment_references, depend_on_referenced_packages
 
 import 'package:flutter/material.dart';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:meta/meta.dart';
@@ -130,7 +129,10 @@ String _getGoldenName<T>(
 
   final formattedState = state?.trim().replaceAll(' ', '_');
 
-  return '${includeThemeName ? theme.stringified : 'no_theme'}${locale == null ? '' : '.${locale.languageCode}'}${formattedState == null ? '' : '.$formattedState'}.$name';
+  return '$name.'
+      '${formattedState == null ? '' : '$formattedState.'}'
+      '${locale == null ? '' : '${locale.languageCode}.'}'
+      '${includeThemeName ? theme.stringified : 'no_theme'}';
 }
 
 enum ThemeType {

@@ -8,20 +8,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get appTitle => 'Пример для пакета surf_widget_test_composer.';
 
   @override
-  String get sampleFeatureTitle => 'Элементы для примера';
+  String get countersTitle => 'Счётчики';
 
   @override
-  String sampleFeatureSampleItemTitle(int id) {
-    return 'Элемент $id';
-  }
+  String get riverpodCounterTitle => 'Счётчик на базе Riverpod';
 
   @override
-  String get sampleFeatureItemDetailsViewTitle => 'Детали элемента';
+  String get elementaryCounterTitle => 'Счётчик на базе Elementary';
 
   @override
-  String sampleFeatureItemDetailsViewInfo(String company) {
-    return 'Это информация о $company';
-  }
+  String get blocCounterTitle => 'Счётчик на базе Bloc';
 
   @override
   String get settingsTitle => 'Настройки';

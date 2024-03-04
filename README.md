@@ -1,8 +1,10 @@
-# Widget Test Composer
+<p align="center">
+<img src="./docs/images/cover.png" height="220" />
+</p>
 
 ## Description
 
-Utility that simplifies widget and golden testing.
+Widget Test Composer is a utility package designed to simplify widget and golden testing processes using [golden_toolkit](https://pub.dev/packages/golden_toolkit) package for Flutter applications. Developed by [Surf :surfer:](https://surf.dev/flutter/) Flutter team :cow2:, it offers comprehensive features to facilitate efficient testing workflows.
 
 ## Installation
 
@@ -13,12 +15,15 @@ dependencies:
   surf_widget_test_composer: $currentVersion$
 ```
 
-## Getting started
+## Example
+
+### Getting started
 
 You need to create file `test/flutter_test_config.dart`. There you will specify:
-- themes of your app you need to test;
 - localizations of your app;
-- list of devices you want to test on.
+- themes of your app you need to test;
+- list of devices you want to test on;
+- tolerance for golden tests (the resulting [diffPercent](https://api.flutter.dev/flutter/flutter_test/ComparisonResult/diffPercent.html) must be less than the `tolerance` settings property).
 
 E.g. you have two themes: light and dark. You need to test the app on two devices: iPhone 11, Google Pixel 4a and iPhone SE 1. You need to test the app in two languages: English and Russian. You need to test your app on two locales: US and RU. You also have DI scope that you need to wrap your widget with.
 
@@ -35,15 +40,14 @@ import 'package:your_app/assets/colors/app_color_scheme.dart';
 import 'package:your_app/assets/themes/app_theme_data.dart';
 import 'package:your_app/features/app/di/app_scope.dart';
 import 'package:your_app/features/common/widgets/di_scope/di_scope.dart';
+import 'package:surf_widget_test_composer/surf_widget_test_composer.dart';
 import 'package:surf_widget_test_composer/surf_widget_test_composer.dart' as helper;
 
 class MockAppScope extends Mock implements IAppScope {}
 
 Future<void> testExecutable(FutureOr<void> Function() testMain) {
-  final mockAppScope = MockAppScope();
-
-    /// You can specify your own themes.
-    /// Stringified is used for naming screenshots.
+  /// You can specify your own themes.
+  /// Stringified is used for naming screenshots.
   final themes = [
     helper.TestingTheme(
       data: AppThemeData.dark,
@@ -77,95 +81,242 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) {
   return helper.testExecutable(
     testMain: testMain,
     themes: themes,
-    wrapper: (child, mode, theme, localizations, locales) => helper.BaseWidgetTestWrapper(
+    localizations: _localizations,
+    locales: _locales,
+    wrapper: (child, mode, theme, localizations, locales, localizations, locales) =>
+        helper.BaseWidgetTestWrapper(
       childBuilder: child,
       mode: mode,
       themeData: theme,
-      localizations: _localizationsDelegates,
-      localeOverrides: _localizations,
-      dependencies: (child) => DiScope<IAppScope>(
-        factory: () => mockAppScope,
-        child: child,
-      ),
+      localizations: localizations,
+      localeOverrides: locales,
+      // You can specify dependencies here.
+      dependencies: (child) => child,
     ),
+
     /// You can specify background color of golden test based on current theme.
     backgroundColor: (theme) => theme.colorScheme.background,
     devicesForTest: devices,
+
+    /// You can specify tolerance for golden tests.
+    tolerance: 0.5,
   );
 }
-
-const _localizations = [
-  Locale('en', 'US'),
-  Locale('ru', 'RU'),
-];
-
-const _localizationsDelegates = [
-  AppLocalizations.delegate,
-  GlobalMaterialLocalizations.delegate,
-  GlobalWidgetsLocalizations.delegate,
-  GlobalCupertinoLocalizations.delegate,
-];
-
 ```
 
-## Usage
+According to the config, **12 goldens** will be generated for each test: **2 locales** x **2 themes** x **3 devises**.
 
-**IMPORTANT**: Always specify the generic type of the widget you are testing (e.g.,`testWidget<TestableScreen>`), as the golden's name generation is based on the widget class name.
+> For example [goldens for SampleItemListView](example/test/src/sample_feature/goldens).
 
-## Example
+### Usage
 
+Now we can prepare tests.
+
+If in addition to golden tests you also need widget tests, then you can make something like this:
 ```dart
-class MockTestableScreenWM extends Mock implements ITestableScreenWM {}
+class MockSettingsService extends Mock implements SettingsService {}
 
 void main() {
-  final mockData = MockData('test data');
-  final widget = TestableScreen(mockData);
-  final wm = MockTestableScreenWM();
+  final mockSettingsService = MockSettingsService();
 
-  testWidget<TestableScreen>(
-    desc: 'Test screen',
-    widgetBuilder: (_, __) => widget.build(wm),
+  const widget = SettingsScreen();
+
+  /// Generate golden.
+  testWidget<SettingsScreen>(
+    desc: 'SettingsScreen',
+    widgetBuilder: (context, theme) => ProviderScope(
+      overrides: [
+        settingsServiceProvider.overrideWithValue(mockSettingsService),
+      ],
+      child: Consumer(
+        builder: (context, ref, _) => widget.build(context, ref),
+      ),
+    ),
     setup: (context, mode) {
-      when(() => wm.data).thenReturn(EntityValueNotifier(mockData));
-      when(() => wm.theme).thenReturn(Theme.of(context));
-      when(wm.onSubmitPressed).thenAnswer((_) => Future.value());
-      when(wm.onCancelPressed).thenReturn(null);
+      registerFallbackValue(ThemeMode.light);
+
+      when(() => mockSettingsService.themeMode()).thenAnswer(
+        (_) => Future.value(ThemeMode.dark),
+      );
+      when(() => mockSettingsService.updateThemeMode(any()))
+          .thenAnswer((_) => Future.value());
     },
-    test: (tester, theme) async {
-        final submitButton = find.widgetWithText(PrimaryButton, CommonStrings.submitButton);
-        final cancelButton = find.widgetWithText(SecondaryButton, CommonStrings.cancelButton);
-        
-        expect(submitButton, findsOneWidget);
-        expect(cancelButton, findsOneWidget);
-        expect(finder, findsOneWidget);
 
-        await tester.tap(submitButton);
-        verify(wm.onSubmitPressed);
+    /// Widget tests.
+    test: (tester, context) async {
+      final button = find.byType(DropdownButton<ThemeMode>);
+      expect(button, findsOneWidget);
 
-        await tester.tap(cancelButton);
-        verify(wm.onCancelPressed);
+      final floatingActionButton = find.byIcon(Icons.light_mode);
+      expect(floatingActionButton, findsOneWidget);
+
+      verifyNever(() => mockSettingsService.updateThemeMode(any()));
+      await tester.tap(floatingActionButton);
+      verify(() => mockSettingsService.updateThemeMode(any())).called(1);
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.mode_night), findsOneWidget);
     },
-  );
-
-  /// Nothing to test, just want to generate the golden.
-  testWidget<TestableScreen>(
-    desc: 'Test screen - loading',
-    widgetBuilder: (_, __) => widget.build(wm),
-    /// Since we are testing a specific widget state, we fill in the [screenState] property.
-    screenState: 'loading',
-    setup: (context, data) {
-      when(() => wm.data).thenReturn(EntityValueNotifier.loading());
-      when(() => wm.theme).thenReturn(Theme.of(context));
-    }
   );
 }
+```
+
+If you just need goldens, then the test might look like this:
+```dart
+void main() {
+  const widget = SampleItemListView();
+
+  /// Nothing to test, just want to generate the golden.
+  testWidget<SampleItemListView>(
+    desc: 'SampleItemListView - result',
+    widgetBuilder: (context, _) => widget.build(context),
+    // If we need to indicate that we are testing a specific widget/screen state,
+    // we can fill in the [screenState] field.
+    screenState: 'result',
+  );
+}
+```
+
+> [!WARNING]
+> Always specify the generic type of the widget you are testing (e.g.,`testWidget<TestableScreen>`), as the golden's name generation is based on the widget class name.
+
+### Example for Elementary
+
+```dart
+class MockElementaryCounterWM extends Mock implements IElementaryCounterWM {}
+
+void main() {
+  const int testValue = 5;
+  const widget = ElementaryCounterScreen();
+  final wm = MockElementaryCounterWM();
+
+  /// Generate golden.
+  testWidget<ElementaryCounterScreen>(
+    desc: 'ElementaryCounterScreen',
+    widgetBuilder: (context, theme) => widget.build(wm),
+    setup: (context, mode) {
+      when(() => wm.title).thenReturn('Elementary Counter');
+      when(() => wm.value).thenReturn(StateNotifier<int>(initValue: testValue));
+      when(() => wm.increment()).thenReturn(null);
+    },
+
+    /// Widget tests.
+    test: (tester, context) async {
+      expect(find.widgetWithText(Center, testValue.toString()), findsOneWidget);
+
+      final floatingActionButton = find.byIcon(Icons.add);
+      expect(floatingActionButton, findsOneWidget);
+
+      await tester.tap(floatingActionButton);
+      verify(wm.increment);
+    },
+  );
+}
+```
+
+### Example for Riverpod
+
+```dart
+class MockRiverpodCounterScreenController extends AutoDisposeNotifier<int>
+    with Mock
+    implements RiverpodCounterScreenController {}
+
+void main() {
+  const int testValue = 5;
+  const widget = RiverpodCounterScreen();
+  final mockController = MockRiverpodCounterScreenController();
+
+  final container = ProviderContainer(
+    overrides: [
+      riverpodCounterScreenControllerProvider
+          .overrideWith(() => mockController),
+    ],
+  );
+
+  /// Generate golden.
+  testWidget<RiverpodCounterScreen>(
+    desc: 'RiverpodCounterScreen',
+    widgetBuilder: (context, theme) => UncontrolledProviderScope(
+      container: container,
+      child: Consumer(
+        builder: (context, ref, _) => widget.build(context, ref),
+      ),
+    ),
+
+    setup: (context, mode) {
+      when(() => mockController.build()).thenReturn(testValue);
+      when(() => mockController.increment()).thenReturn(null);
+    },
+
+    /// Widget tests.
+    test: (tester, context) async {
+      expect(find.widgetWithText(Center, testValue.toString()), findsOneWidget);
+
+      final floatingActionButton = find.byIcon(Icons.add);
+      expect(floatingActionButton, findsOneWidget);
+
+      await tester.tap(floatingActionButton);
+      verify(() => mockController.increment()).called(1);
+    },
+  );
+}
+```
+
+### Example for BLoC
+
+```dart
+class MockBlocCounterBloc extends Mock implements BlocCounterBloc {}
+
+void main() {
+  const int testValue = 5;
+  final mockBloc = MockBlocCounterBloc();
+  const widget = BlocCounterView();
+
+  /// Generate golden.
+  testWidget<BlocCounterView>(
+    desc: 'BlocCounterView',
+    widgetBuilder: (context, theme) => MultiBlocProvider(
+      providers: [
+        BlocProvider<BlocCounterBloc>(create: (_) => mockBloc),
+      ],
+      child: widget,
+    ),
+
+    setup: (context, mode) {
+      when(() => mockBloc.state).thenReturn(testValue);
+      when(() => mockBloc.stream).thenAnswer(
+        (_) => Stream<int>.fromIterable([testValue]),
+      );
+      when(() => mockBloc.add(Increment())).thenAnswer((_) => Future.value());
+      when(() => mockBloc.close()).thenAnswer((_) => Future.value());
+    },
+
+    /// Widget tests.
+    test: (tester, context) async {
+      expect(find.widgetWithText(Center, testValue.toString()), findsOneWidget);
+
+      final floatingActionButton = find.byIcon(Icons.add);
+      expect(floatingActionButton, findsOneWidget);
+
+      await tester.tap(floatingActionButton);
+      verify(() => mockBloc.add(Increment())).called(1);
+    },
+  );
+}
+```
+
+## Generating goldens
+
+Don't forget to generate goldens before use:
+```sh
+flutter test --update-goldens --tags=golden
 ```
 
 ## Additional Information
 
 While testing, you can face the following errors:
 ```sh
-00:05 +0: WHEN tasks are not completedTHEN shows `CircularProgressIndicator`                                                                                                                                
+00:05 +0: WHEN tasks are not completedTHEN shows `CircularProgressIndicator`
 ══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
 The following assertion was thrown while running async test code:
 pumpAndSettle timed out
