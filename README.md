@@ -38,30 +38,30 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) {
   /// You can specify your own themes.
   /// Stringified is used for naming screenshots.
   final themes = [
-    TestingTheme(
+    helper.TestingTheme(
       data: ThemeData.dark(),
       stringified: 'dark',
-      type: ThemeType.dark,
+      type: helper.ThemeType.dark,
     ),
-    TestingTheme(
+    helper.TestingTheme(
       data: ThemeData.light(),
       stringified: 'light',
-      type: ThemeType.light,
+      type: helper.ThemeType.light,
     ),
   ];
 
   /// You can specify your own devices.
   final devices = [
-    TestDevice(
+    helper.TestDevice(
       name: 'iphone11',
       size: const Size(414, 896),
       safeArea: const EdgeInsets.only(top: 44, bottom: 34),
     ),
-    TestDevice(
+    helper.TestDevice(
       name: 'pixel 4a',
       size: const Size(393, 851),
     ),
-    TestDevice(
+    helper.TestDevice(
       name: 'iphone_se_1',
       size: const Size(640 / 2, 1136 / 2),
     ),
@@ -73,7 +73,7 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) {
     localizations: _localizations,
     locales: _locales,
     wrapper: (child, mode, theme, localizations, locales) =>
-        BaseWidgetTestWrapper(
+        helper.BaseWidgetTestWrapper(
       childBuilder: child,
       mode: mode,
       themeData: theme,
