@@ -50,14 +50,14 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) {
   /// Stringified is used for naming screenshots.
   final themes = [
     helper.TestingTheme(
-      data: AppThemeData.dark,
+      data: ThemeData.dark(),
       stringified: 'dark',
-      type: ThemeType.dark,
+      type: helper.ThemeType.dark,
     ),
     helper.TestingTheme(
-      data: AppThemeData.light,
+      data: ThemeData.light(),
       stringified: 'light',
-      type: ThemeType.light,
+      type: helper.ThemeType.light,
     ),
   ];
 
@@ -83,7 +83,7 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) {
     themes: themes,
     localizations: _localizations,
     locales: _locales,
-    wrapper: (child, mode, theme, localizations, locales, localizations, locales) =>
+    wrapper: (child, mode, theme, localizations, locales) =>
         helper.BaseWidgetTestWrapper(
       childBuilder: child,
       mode: mode,
