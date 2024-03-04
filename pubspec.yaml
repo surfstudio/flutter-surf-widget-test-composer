@@ -1,5 +1,5 @@
 name: surf_widget_test_composer
-description: A utility created to streamline golden testing procedures.
+description: Widget Test Composer is a utility package designed to simplify widget and golden testing processes using golden_toolkit package.
 version: 0.0.1
 
 homepage: https://github.com/surfstudio/flutter-surf-widget-test-composer
