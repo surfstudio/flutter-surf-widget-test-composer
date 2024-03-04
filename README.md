@@ -33,17 +33,13 @@ Then your file `test/flutter_test_config.dart` will look like this:
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:your_app/assets/colors/app_color_scheme.dart';
-import 'package:your_app/assets/themes/app_theme_data.dart';
-import 'package:your_app/features/app/di/app_scope.dart';
-import 'package:your_app/features/common/widgets/di_scope/di_scope.dart';
-import 'package:surf_widget_test_composer/surf_widget_test_composer.dart';
-import 'package:surf_widget_test_composer/surf_widget_test_composer.dart' as helper;
+import 'package:surf_widget_test_composer/surf_widget_test_composer.dart'
+    as helper;
+import 'package:surf_widget_test_composer_example/src/localization/app_localizations.dart';
 
-class MockAppScope extends Mock implements IAppScope {}
+/// Localization and locales from auto-generated AppLocalizations.
+const _localizations = AppLocalizations.localizationsDelegates;
+const _locales = AppLocalizations.supportedLocales;
 
 Future<void> testExecutable(FutureOr<void> Function() testMain) {
   /// You can specify your own themes.
