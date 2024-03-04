@@ -1,5 +1,5 @@
 <p align="center">
-<img src="./docs/images/cover.png" height="220" />
+<img src="./doc/images/cover.png" height="220" />
 </p>
 
 ## Description
