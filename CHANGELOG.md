@@ -1,3 +1,9 @@
+## 0.0.3
+
+* Add missing asserts.
+* Add clarification import to README.md.
+* Remove redundant top-level fields.
+
 ## 0.0.2
 
 * Minor documentation changes since publication.
