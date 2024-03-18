@@ -11,6 +11,6 @@ on:
       - opened
 jobs:
   label_issues:
-    uses: surfstudio/flutter-ci-workflows/.github/workflows/new_issues_label.yml@main
+    uses: surfstudio/flutter-ci-workflows/.github/workflows/new_issues_label.yml@SNP-903_fix_and_update_CI
     secrets:
       SECRET_ISSUES: ${{ secrets.ACCESS_TOKEN_FOR_SURFGEAR }}
