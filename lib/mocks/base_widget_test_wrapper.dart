@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_implementing_value_types
 import 'package:flutter/material.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
-import 'package:surf_widget_test_composer/utils/test_widget.dart';
+import 'package:surf_widget_test_composer/utils/testing_theme.dart';
 
 /// Wrapper for the widget test.
 ///

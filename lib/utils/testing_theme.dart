@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'test_widget.dart';
-
 /// Theme for testing.
 class TestingTheme {
   /// Theme data.
@@ -18,4 +16,20 @@ class TestingTheme {
     required this.stringified,
     required this.type,
   });
+}
+
+enum ThemeType {
+  dark,
+  light;
+
+  ThemeMode get toThemeMode {
+    switch (this) {
+      case ThemeType.dark:
+        return ThemeMode.dark;
+      case ThemeType.light:
+        return ThemeMode.light;
+    }
+  }
+
+  const ThemeType();
 }

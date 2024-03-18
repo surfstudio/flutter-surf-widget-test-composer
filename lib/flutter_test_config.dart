@@ -15,10 +15,6 @@ typedef WidgetWrapperBuilder = BaseWidgetTestWrapper Function(
   List<Locale>,
 );
 
-/// List of devices used for testing
-@protected
-late final List<TestDevice> devices;
-
 /// List of themes used for testing.
 @protected
 late final List<TestingTheme> themesForTesting;
@@ -38,10 +34,6 @@ late final WidgetWrapperBuilder widgetWrapper;
 /// Background color for the golden file.
 @protected
 late final Color Function(ThemeData) getBackgroundColor;
-
-/// Tolerance for golden tests with default value 0.18.
-@protected
-late final double toleranceForTesting;
 
 /// Entry point for the widget test.
 ///
@@ -65,13 +57,11 @@ Future<void> testExecutable({
   double tolerance = 0.18,
   LocalFileComparator? customComparator,
 }) {
-  devices = devicesForTest;
   themesForTesting = themes;
   localizationsForTesting = localizations;
   localesForTesting = locales;
   widgetWrapper = wrapper;
   getBackgroundColor = backgroundColor;
-  toleranceForTesting = tolerance;
   return GoldenToolkit.runWithConfiguration(
     () async {
       await loadAppFonts();
@@ -81,11 +71,12 @@ Future<void> testExecutable({
         goldenFileComparator = customComparator ??
             CustomFileComparator(
               '${(goldenFileComparator as LocalFileComparator).basedir}/goldens',
+              tolerance,
             );
       }
     },
     config: GoldenToolkitConfiguration(
-      defaultDevices: devices,
+      defaultDevices: devicesForTest,
       enableRealShadows: true,
     ),
   );
@@ -95,7 +86,9 @@ Future<void> testExecutable({
 ///
 /// Allows specifying the tolerance for the golden file.
 class CustomFileComparator extends LocalFileComparator {
-  CustomFileComparator(String testFile) : super(Uri.parse(testFile));
+  final double tolerance;
+  CustomFileComparator(String testFile, this.tolerance)
+      : super(Uri.parse(testFile));
 
   @override
   Future<bool> compare(Uint8List imageBytes, Uri golden) async {
@@ -104,7 +97,7 @@ class CustomFileComparator extends LocalFileComparator {
       await getGoldenBytes(golden),
     );
 
-    if (!result.passed && result.diffPercent >= toleranceForTesting) {
+    if (!result.passed && result.diffPercent >= tolerance) {
       final error = await generateFailureOutput(result, golden, basedir);
       throw FlutterError(error);
     }
@@ -115,6 +108,6 @@ class CustomFileComparator extends LocalFileComparator {
       );
     }
 
-    return result.passed || result.diffPercent <= toleranceForTesting;
+    return result.passed || result.diffPercent <= tolerance;
   }
 }
