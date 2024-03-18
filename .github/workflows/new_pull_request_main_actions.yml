@@ -17,6 +17,6 @@ on:
 
 jobs:
   pull_request:
-    uses: surfstudio/flutter-ci-workflows/.github/workflows/new_pull_request_label.yml@SNP-903_fix_and_update_CI
+    uses: surfstudio/flutter-ci-workflows/.github/workflows/new_pull_request_label.yml@main
     secrets:
       SECRET_ISSUES: ${{ secrets.ACCESS_TOKEN_FOR_SURFGEAR }}

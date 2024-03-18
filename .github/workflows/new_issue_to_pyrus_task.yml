@@ -24,7 +24,7 @@ jobs:
   call_create_pyrus_task_from_issue:
     name: Create Pyrus task from issue
     needs: get_package_name
-    uses: surfstudio/flutter-ci-workflows/.github/workflows/new_issue_to_pyrus_task.yml@SNP-903_fix_and_update_CI
+    uses: surfstudio/flutter-ci-workflows/.github/workflows/new_issue_to_pyrus_task.yml@main
     with:
       PACKAGE_NAME: ${{ needs.get_package_name.outputs.package_name }}
       ISSUE_TITLE: ${{ github.event.issue.title }}
