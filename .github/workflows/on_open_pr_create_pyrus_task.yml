@@ -15,7 +15,7 @@ jobs:
     needs: get_package_name
     uses: surfstudio/flutter-ci-workflows/.github/workflows/create_pyrus_task_from_issue_or_pr.yml@SNP-1124_update_CI
     with:
-      TYPE: Issue
+      TYPE: Pull request
       PACKAGE_NAME: ${{ needs.get_package_name.outputs.package_name }}
       TITLE: ${{ github.event.pull_request.title }}
       BODY: ${{ github.event.pull_request.body }}
