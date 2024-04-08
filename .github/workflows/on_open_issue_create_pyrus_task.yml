@@ -18,7 +18,6 @@ jobs:
       TYPE: Issue
       PACKAGE_NAME: ${{ needs.get_package_name.outputs.package_name }}
       TITLE: ${{ github.event.issue.title }}
-      BODY: ${{ github.event.issue.body }}
       LINK: ${{ github.event.issue.html_url }}
     secrets:
       LOGIN: ${{ secrets.PYRUS_BOT_LOGIN }}

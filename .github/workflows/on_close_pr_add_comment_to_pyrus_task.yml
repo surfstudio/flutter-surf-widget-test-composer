@@ -18,7 +18,7 @@ jobs:
     uses: surfstudio/flutter-ci-workflows/.github/workflows/add_comment_to_pyrus_task.yml@SNP-1124_update_CI
     with:
       PYRUS_TASK_ID: ${{ needs.get_pyrus_task_id.outputs.PYRUS_TASK_ID }}
-      COMMENT_TEXT: Pull request закрыт.
+      COMMENT_TEXT: The pull request is closed.
     secrets:
       LOGIN: ${{ secrets.PYRUS_BOT_LOGIN }}
       SECURITY_KEY: ${{ secrets.PYRUS_BOT_SECRET_KEY }}
