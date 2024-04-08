@@ -8,12 +8,12 @@ on:
 
 jobs:
   get_package_name:
-    uses: surfstudio/flutter-ci-workflows/.github/workflows/get_package_name.yml@SNP-1124_update_CI
+    uses: surfstudio/flutter-ci-workflows/.github/workflows/get_package_name.yml@main
 
   create_pyrus_task:
     name: Create Pyrus task from pull request
     needs: get_package_name
-    uses: surfstudio/flutter-ci-workflows/.github/workflows/create_pyrus_task_from_issue_or_pr.yml@SNP-1124_update_CI
+    uses: surfstudio/flutter-ci-workflows/.github/workflows/create_pyrus_task_from_issue_or_pr.yml@main
     with:
       TYPE: Pull request
       PACKAGE_NAME: ${{ needs.get_package_name.outputs.package_name }}
@@ -26,7 +26,7 @@ jobs:
   add_pyrus_task_link:
     name: Add Pyrus task link
     needs: create_pyrus_task
-    uses: surfstudio/flutter-ci-workflows/.github/workflows/add_comment_to_issue_or_pr.yml@SNP-1124_update_CI
+    uses: surfstudio/flutter-ci-workflows/.github/workflows/add_comment_to_issue_or_pr.yml@main
     with:
       ISSUE_NUMBER: ${{ github.event.pull_request.number }}
       # Don't change the comment link, because the Pyrus task ID is searched by the link text

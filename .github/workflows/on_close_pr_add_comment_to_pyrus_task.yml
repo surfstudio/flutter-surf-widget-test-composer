@@ -8,14 +8,14 @@ on:
 jobs:
   get_pyrus_task_id:
     name: Get Pyrus task ID from special comment in issue
-    uses: surfstudio/flutter-ci-workflows/.github/workflows/get_pyrus_task_id_from_issue_or_pr_comment.yml@SNP-1124_update_CI
+    uses: surfstudio/flutter-ci-workflows/.github/workflows/get_pyrus_task_id_from_issue_or_pr_comment.yml@main
     with:
       ISSUE_NUMBER: ${{ github.event.pull_request.number }}
 
   add_comment_to_pyrus_task:
     name: Add comment to Pyrus task
     needs: get_pyrus_task_id
-    uses: surfstudio/flutter-ci-workflows/.github/workflows/add_comment_to_pyrus_task.yml@SNP-1124_update_CI
+    uses: surfstudio/flutter-ci-workflows/.github/workflows/add_comment_to_pyrus_task.yml@main
     with:
       PYRUS_TASK_ID: ${{ needs.get_pyrus_task_id.outputs.PYRUS_TASK_ID }}
       COMMENT_TEXT: The pull request is closed.

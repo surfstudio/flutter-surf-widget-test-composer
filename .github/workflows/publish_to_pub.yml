@@ -7,17 +7,17 @@ on:
 
 jobs:
   get_flutter_version:
-    uses: surfstudio/flutter-ci-workflows/.github/workflows/get_flutter_version.yml@SNP-1124_update_CI
+    uses: surfstudio/flutter-ci-workflows/.github/workflows/get_flutter_version.yml@main
 
   analysis:
     needs: get_flutter_version
-    uses: surfstudio/flutter-ci-workflows/.github/workflows/analysis.yml@SNP-1124_update_CI
+    uses: surfstudio/flutter-ci-workflows/.github/workflows/analysis.yml@main
     with:
       FLUTTER_VERSION: ${{ needs.get_flutter_version.outputs.FLUTTER_VERSION }}
 
   testing:
     needs: [analysis, get_flutter_version]
-    uses: surfstudio/flutter-ci-workflows/.github/workflows/testing.yml@SNP-1124_update_CI
+    uses: surfstudio/flutter-ci-workflows/.github/workflows/testing.yml@main
     with:
       FLUTTER_VERSION: ${{ needs.get_flutter_version.outputs.FLUTTER_VERSION }}
     secrets:
@@ -25,7 +25,7 @@ jobs:
 
   package-publishing:
     needs: [analysis, testing, get_flutter_version]
-    uses: surfstudio/flutter-ci-workflows/.github/workflows/publish_to_pub.yml@SNP-1124_update_CI
+    uses: surfstudio/flutter-ci-workflows/.github/workflows/publish_to_pub.yml@main
     with:
       FLUTTER_VERSION: ${{ needs.get_flutter_version.outputs.FLUTTER_VERSION }}
       PANA_TOTAL: "100"
