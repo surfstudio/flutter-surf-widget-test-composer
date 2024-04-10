@@ -7,10 +7,6 @@
 
 Made by [Surf 🏄‍♂️🏄‍♂️🏄‍♂️](https://surf.dev/)
 
-<p align="center">
-<img src="https://github.com/surfstudio/flutter-surf-widget-test-composer/blob/main/doc/images/cover.png?raw=true" height="220" />
-</p>
-
 ## Overview
 
 Widget Test Composer is a utility package designed to simplify widget and golden testing processes using [golden_toolkit](https://pub.dev/packages/golden_toolkit) package for Flutter applications. Developed by [Surf :surfer:](https://surf.dev/flutter/) Flutter team :cow2:, it offers comprehensive features to facilitate efficient testing workflows.
@@ -29,6 +25,7 @@ dependencies:
 ### Getting started
 
 You need to create file `test/flutter_test_config.dart`. There you will specify:
+
 - localizations of your app;
 - themes of your app you need to test;
 - list of devices you want to test on;
@@ -114,6 +111,7 @@ According to the config, **12 goldens** will be generated for each test: **2 loc
 Now we can prepare tests.
 
 If in addition to golden tests you also need widget tests, then you can make something like this:
+
 ```dart
 class MockSettingsService extends Mock implements SettingsService {}
 
@@ -163,6 +161,7 @@ void main() {
 ```
 
 If you just need goldens, then the test might look like this:
+
 ```dart
 void main() {
   const widget = SampleItemListView();
@@ -309,6 +308,7 @@ void main() {
 ## Generating goldens
 
 Don't forget to generate goldens before use:
+
 ```sh
 flutter test --update-goldens --tags=golden
 ```
@@ -316,6 +316,7 @@ flutter test --update-goldens --tags=golden
 ## Additional Information
 
 While testing, you can face the following errors:
+
 ```sh
 00:05 +0: WHEN tasks are not completedTHEN shows `CircularProgressIndicator`
 ══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
@@ -323,8 +324,10 @@ The following assertion was thrown while running async test code:
 pumpAndSettle timed out
 ```
 
-This error means that the widget you are testing has an infinite loop. Usually this happens when you use looped animations. In order to fix this you can: 
+This error means that the widget you are testing has an infinite loop. Usually this happens when you use looped animations. In order to fix this you can:
+
 - define your custom pump function. E.g.:
+
 ```dart
 /// Nothing to test, just want to generate the golden.
   testWidget<TestableScreen>(
@@ -340,9 +343,11 @@ This error means that the widget you are testing has an infinite loop. Usually t
     }
   );
 ```
+
 > **NOTE**: This may lead to a mismatch between same goldens - every time you run the test, the golden may be different.
 
 - you also can use `TestEnvDetector.isTestEnvironment` in your widget. E.g.:
+
   ```dart
   CircularProgressIndicator(
       value: TestEnvDetector.isTestEnvironment ? 0.5 : value,
