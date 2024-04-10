@@ -7,6 +7,13 @@
 
 Made by [Surf 🏄‍♂️🏄‍♂️🏄‍♂️](https://surf.dev/)
 
+[![Build Status](https://shields.io/github/actions/workflow/status/surfstudio/flutter-surf-widget-test-composer/on_pull_request.yml?logo=github&logoColor=white)](https://github.com/surfstudio/flutter-surf-widget-test-composer)
+[![Coverage Status](https://img.shields.io/codecov/c/github/surfstudio/flutter-surf-widget-test-composer?logo=codecov&logoColor=white)](https://app.codecov.io/gh/surfstudio/flutter-surf-widget-test-composer)
+[![Pub Version](https://img.shields.io/pub/v/surf_widget_test_composer?logo=dart&logoColor=white)](https://pub.dev/packages/surf_widget_test_composer)
+[![Pub Likes](https://badgen.net/pub/likes/surf_widget_test_composer)](https://pub.dev/packages/surf_widget_test_composer)
+[![Pub popularity](https://badgen.net/pub/popularity/surf_widget_test_composer)](https://pub.dev/packages/surf_widget_test_composer/score)
+[![License: Apache 2.0](https://img.shields.io/badge/license-apache-purple.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+
 ## Overview
 
 Widget Test Composer is a utility package designed to simplify widget and golden testing processes using [golden_toolkit](https://pub.dev/packages/golden_toolkit) package for Flutter applications. Developed by [Surf :surfer:](https://surf.dev/flutter/) Flutter team :cow2:, it offers comprehensive features to facilitate efficient testing workflows.
