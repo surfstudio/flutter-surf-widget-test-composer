@@ -1,6 +1,18 @@
-<p align="center">
-<img src="https://github.com/surfstudio/flutter-surf-widget-test-composer/blob/main/doc/images/cover.png?raw=true" height="220" />
-</p>
+# Widget Test Composer
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/surfstudio/flutter-open-source/blob/887525c23f4d57a2d96fc2e6a31e15d1e29d1787/assets/logo_white.png">
+  <img alt="Shows an illustrated sun in light color mode and a moon with stars in dark color mode." src="https://github.com/surfstudio/flutter-open-source/blob/887525c23f4d57a2d96fc2e6a31e15d1e29d1787/assets/logo_black.png" width ="200">
+</picture>
+
+Made by [Surf 🏄‍♂️🏄‍♂️🏄‍♂️](https://surf.dev/)
+
+[![Build Status](https://shields.io/github/actions/workflow/status/surfstudio/flutter-surf-widget-test-composer/on_pull_request.yml?logo=github&logoColor=white)](https://github.com/surfstudio/flutter-surf-widget-test-composer)
+[![Coverage Status](https://img.shields.io/codecov/c/github/surfstudio/flutter-surf-widget-test-composer?logo=codecov&logoColor=white)](https://app.codecov.io/gh/surfstudio/flutter-surf-widget-test-composer)
+[![Pub Version](https://img.shields.io/pub/v/surf_widget_test_composer?logo=dart&logoColor=white)](https://pub.dev/packages/surf_widget_test_composer)
+[![Pub Likes](https://badgen.net/pub/likes/surf_widget_test_composer)](https://pub.dev/packages/surf_widget_test_composer)
+[![Pub popularity](https://badgen.net/pub/popularity/surf_widget_test_composer)](https://pub.dev/packages/surf_widget_test_composer/score)
+[![License: Apache 2.0](https://img.shields.io/badge/license-apache-purple.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 ## Overview
 
@@ -20,6 +32,7 @@ dependencies:
 ### Getting started
 
 You need to create file `test/flutter_test_config.dart`. There you will specify:
+
 - localizations of your app;
 - themes of your app you need to test;
 - list of devices you want to test on;
@@ -105,6 +118,7 @@ According to the config, **12 goldens** will be generated for each test: **2 loc
 Now we can prepare tests.
 
 If in addition to golden tests you also need widget tests, then you can make something like this:
+
 ```dart
 class MockSettingsService extends Mock implements SettingsService {}
 
@@ -154,6 +168,7 @@ void main() {
 ```
 
 If you just need goldens, then the test might look like this:
+
 ```dart
 void main() {
   const widget = SampleItemListView();
@@ -300,6 +315,7 @@ void main() {
 ## Generating goldens
 
 Don't forget to generate goldens before use:
+
 ```sh
 flutter test --update-goldens --tags=golden
 ```
@@ -307,6 +323,7 @@ flutter test --update-goldens --tags=golden
 ## Additional Information
 
 While testing, you can face the following errors:
+
 ```sh
 00:05 +0: WHEN tasks are not completedTHEN shows `CircularProgressIndicator`
 ══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
@@ -314,8 +331,10 @@ The following assertion was thrown while running async test code:
 pumpAndSettle timed out
 ```
 
-This error means that the widget you are testing has an infinite loop. Usually this happens when you use looped animations. In order to fix this you can: 
+This error means that the widget you are testing has an infinite loop. Usually this happens when you use looped animations. In order to fix this you can:
+
 - define your custom pump function. E.g.:
+
 ```dart
 /// Nothing to test, just want to generate the golden.
   testWidget<TestableScreen>(
@@ -331,9 +350,11 @@ This error means that the widget you are testing has an infinite loop. Usually t
     }
   );
 ```
+
 > **NOTE**: This may lead to a mismatch between same goldens - every time you run the test, the golden may be different.
 
 - you also can use `TestEnvDetector.isTestEnvironment` in your widget. E.g.:
+
   ```dart
   CircularProgressIndicator(
       value: TestEnvDetector.isTestEnvironment ? 0.5 : value,
