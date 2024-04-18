@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.6
+
+* Correct logo position in readme.
+
 ## 0.0.5
 
 * Rebranding.
