@@ -35,6 +35,8 @@ late final WidgetWrapperBuilder widgetWrapper;
 @protected
 late final Color Function(ThemeData) getBackgroundColor;
 
+late final String? tokenFromFigma;
+
 /// Entry point for the widget test.
 ///
 /// - [testMain] - function that contains the actual test.
@@ -56,7 +58,9 @@ Future<void> testExecutable({
   List<Locale> locales = const [Locale('en')],
   double tolerance = 0.18,
   LocalFileComparator? customComparator,
+  String? figmaToken,
 }) {
+  tokenFromFigma = figmaToken;
   themesForTesting = themes;
   localizationsForTesting = localizations;
   localesForTesting = locales;
@@ -87,8 +91,7 @@ Future<void> testExecutable({
 /// Allows specifying the tolerance for the golden file.
 class CustomFileComparator extends LocalFileComparator {
   final double tolerance;
-  CustomFileComparator(String testFile, this.tolerance)
-      : super(Uri.parse(testFile));
+  CustomFileComparator(String testFile, this.tolerance) : super(Uri.parse(testFile));
 
   @override
   Future<bool> compare(Uint8List imageBytes, Uri golden) async {
