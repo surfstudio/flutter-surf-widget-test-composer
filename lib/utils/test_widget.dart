@@ -222,6 +222,8 @@ void testWidget<T extends Widget>({
               screenState,
               includeThemeName: !onlyOneTheme,
               fromFigma: true,
+              size: config.size,
+              layoutName: config.layoutName,
             ),
           );
         }
@@ -245,6 +247,8 @@ String _getGoldenName<T>(
   Locale? locale,
   bool includeThemeName = true,
   bool fromFigma = false,
+  Size? size,
+  String? layoutName,
 }) {
   final exp = RegExp('(?<=[a-z])[A-Z]');
   final name = T
@@ -256,12 +260,22 @@ String _getGoldenName<T>(
 
   final formattedState = state?.trim().replaceAll(' ', '_');
 
-  final result = '$name.'
+  var result = '$name.'
       '${formattedState == null ? '' : '$formattedState.'}'
       '${locale == null ? '' : '${locale.languageCode}.'}'
       '${includeThemeName ? theme.stringified : 'no_theme'}';
 
-  return fromFigma ? 'figma.$result' : result;
+  if (fromFigma) {
+    if (layoutName != null) {
+      result = 'figma.$layoutName.$result';
+    } else if (size != null) {
+      result = 'figma.${size.width.toInt()}x${size.height.toInt()}.$result';
+    } else {
+      result = 'figma.$result';
+    }
+  }
+
+  return result;
 }
 
 class _MyHttpOverrides extends HttpOverrides {
