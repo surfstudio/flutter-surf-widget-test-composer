@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.0
+
+* Add possibility to compare Figma and implemented screens.
+
 ## 0.0.6
 
 * Correct logo position in readme.

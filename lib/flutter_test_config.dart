@@ -48,6 +48,7 @@ late final String? tokenFromFigma;
 /// - [backgroundColor] - background color for the golden file.
 /// - [devicesForTest] - list of devices used for testing.
 /// - [customComparator] - custom comparator for the golden file.
+/// - [figmaToken] - figma token for downloading images.
 Future<void> testExecutable({
   required FutureOr<void> Function() testMain,
   required List<TestingTheme> themes,

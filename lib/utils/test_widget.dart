@@ -25,6 +25,7 @@ typedef TestFunctionWithTheme = Future Function(WidgetTester, ThemeData);
 /// - [withGolden] - flag to determine if golden file updates should be performed for this widget.
 /// - [deviceMatters] - flag to determine if golden files should be generated for different devices.
 /// - [screenState] - string that allows specifying the screen state (e.g., loading, error).
+/// - [figmaLayouts] - list of figma configurations that allow comparing the implementation with the design. Make sure you provide the figma token in the `flutter_test_config.dart` file.
 /// - [skip] - Allows skipping the test.
 /// - [onlyOneTheme] - Uses only one of the themes for the test (the first one from the list).
 /// - [onlyOneLocale] - Uses only one of the locales for the test (the first one from the list).
@@ -43,7 +44,7 @@ void testWidget<T extends Widget>({
   bool autoHeight = false,
   bool? skip,
   String? screenState,
-  List<FigmaConfig>? themesToFigmaLinks,
+  List<FigmaConfig>? figmaLayouts,
   Future<void> Function(WidgetTester)? customPump,
   Future<void> Function(TestDevice, WidgetTester)? deviceSetup,
   List<Device>? devices,
@@ -119,14 +120,14 @@ void testWidget<T extends Widget>({
     },
   );
 
-  final imageBytes = <FigmaConfig, Uint8List?>{};
+  final imageBytes = <String, Uint8List?>{};
   final figmaToken = tokenFromFigma;
 
   testWidgets(
     'Retrieve figma images of $T',
     (widgetTester) async {
       await Future.forEach(
-        themesToFigmaLinks ?? [],
+        figmaLayouts ?? [],
         (config) async {
           final figmaLink = config.link;
           if (figmaLink != null && figmaToken != null) {
@@ -141,7 +142,7 @@ void testWidget<T extends Widget>({
                     );
 
                     if (image != null) {
-                      imageBytes[config] = image;
+                      imageBytes[config.link] = image;
                     }
                   },
                   createHttpClient: (SecurityContext? context) {
@@ -156,74 +157,77 @@ void testWidget<T extends Widget>({
     },
   );
 
-  for (final FigmaConfig config in themesToFigmaLinks ?? []) {
-    testGoldens('Figma and Implementation Comparison of $T', (tester) async {
-      final theme = themesForTesting.first;
-      final image = imageBytes[config];
-      if (image != null) {
-        final builder = GoldenBuilder.grid(
-          columns: 2,
-          widthToHeightRatio: 0.2,
-        );
+  testGoldens(
+    'Figma and Implementation Comparison of $T',
+    (tester) async {
+      for (final FigmaConfig config in figmaLayouts ?? []) {
+        final image = imageBytes[config.link];
+        final theme = config.theme;
+        if (image != null) {
+          final builder = GoldenBuilder.grid(
+            columns: 2,
+            widthToHeightRatio: 0.2,
+          );
 
-        builder.addScenario(
-          'Figma',
-          Transform.translate(
-            offset: Offset(-config.cropOffset.left, -config.cropOffset.top),
-            child: _CroppedImageWidget(image, config.cropOffset),
-          ),
-        );
-
-        final locale = localesForTest.firstOrNull ?? (throw Exception('Locale is not provided.'));
-
-        builder.addScenario(
-          'Real',
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: config.size.width - config.cropOffset.left - config.cropOffset.right,
-              maxHeight: config.size.height - config.cropOffset.top - config.cropOffset.bottom,
+          builder.addScenario(
+            'Figma',
+            Transform.translate(
+              offset: Offset(-config.cropOffset.left, -config.cropOffset.top),
+              child: _CroppedImageWidget(image, config.cropOffset),
             ),
-            child: SizedBox(
-              width: config.size.width - config.cropOffset.left - config.cropOffset.right,
-              height: config.size.height - config.cropOffset.top - config.cropOffset.bottom,
-              child: widgetWrapper(
-                (context) {
-                  setup?.call(context, theme.type.toThemeMode);
-                  return ColoredBox(
-                    color: getBackgroundColor(theme.data),
-                    child: widgetBuilder(context, theme.type),
-                  );
-                },
-                theme.type,
-                theme.data,
-                localizationsForTesting,
-                [locale],
+          );
+
+          final locale = localesForTest.firstOrNull ?? (throw Exception('Locale is not provided.'));
+
+          builder.addScenario(
+            'Real',
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: config.size.width - config.cropOffset.left - config.cropOffset.right,
+                maxHeight: config.size.height - config.cropOffset.top - config.cropOffset.bottom,
+              ),
+              child: SizedBox(
+                width: config.size.width - config.cropOffset.left - config.cropOffset.right,
+                height: config.size.height - config.cropOffset.top - config.cropOffset.bottom,
+                child: widgetWrapper(
+                  (context) {
+                    setup?.call(context, theme.type.toThemeMode);
+                    return ColoredBox(
+                      color: getBackgroundColor(theme.data),
+                      child: widgetBuilder(context, theme.type),
+                    );
+                  },
+                  theme.type,
+                  theme.data,
+                  localizationsForTesting,
+                  [locale],
+                ),
               ),
             ),
-          ),
-        );
+          );
 
-        await tester.pumpWidgetBuilder(
-          builder.build(),
-          surfaceSize: Size(
-            (config.size.width - config.cropOffset.left - config.cropOffset.right) * 2 + 50,
-            (config.size.height - config.cropOffset.bottom - config.cropOffset.top) + 100,
-          ),
-          wrapper: materialAppWrapper(),
-        );
+          await tester.pumpWidgetBuilder(
+            builder.build(),
+            surfaceSize: Size(
+              (config.size.width - config.cropOffset.left - config.cropOffset.right) * 2 + 50,
+              (config.size.height - config.cropOffset.bottom - config.cropOffset.top) + 100,
+            ),
+            wrapper: materialAppWrapper(),
+          );
 
-        await screenMatchesGolden(
-          tester,
-          _getGoldenName<T>(
-            theme,
-            screenState,
-            includeThemeName: !onlyOneTheme,
-            fromFigma: true,
-          ),
-        );
+          await screenMatchesGolden(
+            tester,
+            _getGoldenName<T>(
+              theme,
+              screenState,
+              includeThemeName: !onlyOneTheme,
+              fromFigma: true,
+            ),
+          );
+        }
       }
-    });
-  }
+    },
+  );
 }
 
 /// Forms the name of the golden file from:
