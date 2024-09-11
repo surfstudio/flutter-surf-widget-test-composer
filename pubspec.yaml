@@ -15,10 +15,10 @@ dependencies:
   dio: ^5.0.0
   flutter:
     sdk: flutter
-  flutter_test:
-    sdk: flutter
-  golden_toolkit: ^0.15.0
   meta: ^1.9.1
 
 dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  golden_toolkit: ^0.15.0
   flutter_lints: ^3.0.1

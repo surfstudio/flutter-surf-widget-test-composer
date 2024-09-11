@@ -2,8 +2,8 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
-import 'package:surf_widget_test_composer/data/figma_api_error.dart';
-import 'package:surf_widget_test_composer/data/figma_image_request_data.dart';
+import 'package:flutter_figma_test/data/figma_api_error.dart';
+import 'package:flutter_figma_test/data/figma_image_request_data.dart';
 
 class FigmaRestApi {
   const FigmaRestApi._();

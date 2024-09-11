@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_implementing_value_types
 import 'package:flutter/material.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
-import 'package:surf_widget_test_composer/utils/testing_theme.dart';
 
 /// Wrapper for the widget test.
 ///
@@ -18,7 +17,7 @@ class BaseWidgetTestWrapper extends StatelessWidget {
   final WidgetBuilder childBuilder;
 
   /// Theme mode.
-  final ThemeType mode;
+  final ThemeMode mode;
 
   /// Theme data.
   final ThemeData themeData;

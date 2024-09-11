@@ -6,10 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:surf_widget_test_composer/surf_widget_test_composer.dart';
+import 'package:flutter/src/foundation/constants.dart';
 
 typedef WidgetWrapperBuilder = BaseWidgetTestWrapper Function(
   Widget Function(BuildContext),
-  ThemeType,
+  ThemeMode,
   ThemeData,
   List<LocalizationsDelegate<dynamic>>,
   List<Locale>,
@@ -67,6 +68,9 @@ Future<void> testExecutable({
   localesForTesting = locales;
   widgetWrapper = wrapper;
   getBackgroundColor = backgroundColor;
+
+  if (kIsWeb) return Future.value();
+
   return GoldenToolkit.runWithConfiguration(
     () async {
       await loadAppFonts();

@@ -1,9 +1,9 @@
-import 'package:flutter/rendering.dart';
-import 'package:surf_widget_test_composer/utils/testing_theme.dart';
+import 'package:flutter/material.dart';
 
 class FigmaConfig {
   final Size size;
-  final TestingTheme theme;
+  final ThemeMode themeMode;
+  final ThemeData theme;
   final EdgeInsets cropOffset;
   final String link;
   final String? layoutName;
@@ -11,6 +11,7 @@ class FigmaConfig {
   FigmaConfig({
     required this.size,
     required this.theme,
+    required this.themeMode,
     required this.cropOffset,
     required this.link,
     this.layoutName,

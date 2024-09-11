@@ -1,16 +1,12 @@
 // ignore_for_file: comment_references, depend_on_referenced_packages
 
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:meta/meta.dart';
 import 'package:surf_widget_test_composer/domain/device.dart';
-import 'package:surf_widget_test_composer/domain/figma_config.dart';
+import 'package:surf_widget_test_composer/domain/test_strategy.dart';
 import 'package:surf_widget_test_composer/flutter_test_config.dart';
-import 'package:surf_widget_test_composer/service/figma_api.dart';
 import 'package:surf_widget_test_composer/utils/testing_theme.dart';
 import 'package:collection/collection.dart';
 
@@ -35,7 +31,7 @@ typedef TestFunctionWithTheme = Future Function(WidgetTester, ThemeData);
 /// - [deviceSetup] - Allows specifying the setup function for each device.
 @isTest
 void testWidget<T extends Widget>({
-  required Widget Function(BuildContext, ThemeType) widgetBuilder,
+  required Widget Function(BuildContext, ThemeMode) widgetBuilder,
   String? desc,
   TestFunctionWithTheme? test,
   void Function(BuildContext, ThemeMode)? setup,
@@ -44,10 +40,10 @@ void testWidget<T extends Widget>({
   bool autoHeight = false,
   bool? skip,
   String? screenState,
-  List<FigmaConfig>? figmaLayouts,
   Future<void> Function(WidgetTester)? customPump,
   Future<void> Function(TestDevice, WidgetTester)? deviceSetup,
   List<Device>? devices,
+  List<ITestStrategy> strategies = const [],
   bool onlyOneTheme = false,
   bool onlyOneLocale = false,
 }) async {
@@ -86,10 +82,10 @@ void testWidget<T extends Widget>({
                 setup?.call(context, theme.type.toThemeMode);
                 return ColoredBox(
                   color: getBackgroundColor(theme.data),
-                  child: widgetBuilder(context, theme.type),
+                  child: widgetBuilder(context, theme.type.toThemeMode),
                 );
               },
-              theme.type,
+              theme.type.toThemeMode,
               theme.data,
               localizationsForTesting,
               [locale],
@@ -120,116 +116,25 @@ void testWidget<T extends Widget>({
     },
   );
 
-  final imageBytes = <String, Uint8List?>{};
-  final figmaToken = tokenFromFigma;
+  final locale = localesForTesting.firstOrNull ?? (throw Exception('No locales for testing'));
 
-  testWidgets(
-    'Retrieve figma images of $T',
-    (widgetTester) async {
-      await Future.forEach(
-        figmaLayouts ?? [],
-        (config) async {
-          final figmaLink = config.link;
-          if (figmaLink != null && figmaToken != null) {
-            await widgetTester.runAsync(
-              () async {
-                await HttpOverrides.runZoned(
-                  () async {
-                    final image = await FigmaRestApi.downloadFrameImage(
-                      figmatToken: figmaToken,
-                      figmaframeUrl: figmaLink,
-                      imageScale: 1,
-                    );
-
-                    if (image != null) {
-                      imageBytes[config.link] = image;
-                    }
-                  },
-                  createHttpClient: (SecurityContext? context) {
-                    return _MyHttpOverrides().createHttpClient(context);
-                  },
-                );
-              },
-            );
-          }
+  await Future.forEach(strategies, (strategy) async {
+    await strategy.test(
+      widgetBuilder: (theme, themeMode) => widgetWrapper(
+        (context) {
+          setup?.call(context, themeMode);
+          return ColoredBox(
+            color: getBackgroundColor(theme),
+            child: widgetBuilder(context, themeMode),
+          );
         },
-      );
-    },
-  );
-
-  testGoldens(
-    'Figma and Implementation Comparison of $T',
-    (tester) async {
-      for (final FigmaConfig config in figmaLayouts ?? []) {
-        final image = imageBytes[config.link];
-        final theme = config.theme;
-        if (image != null) {
-          final builder = GoldenBuilder.grid(
-            columns: 2,
-            widthToHeightRatio: 0.2,
-          );
-
-          builder.addScenario(
-            'Figma',
-            Transform.translate(
-              offset: Offset(-config.cropOffset.left, -config.cropOffset.top),
-              child: _CroppedImageWidget(image, config.cropOffset),
-            ),
-          );
-
-          final locale = localesForTest.firstOrNull ?? (throw Exception('Locale is not provided.'));
-
-          builder.addScenario(
-            'Real',
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: config.size.width - config.cropOffset.left - config.cropOffset.right,
-                maxHeight: config.size.height - config.cropOffset.top - config.cropOffset.bottom,
-              ),
-              child: SizedBox(
-                width: config.size.width - config.cropOffset.left - config.cropOffset.right,
-                height: config.size.height - config.cropOffset.top - config.cropOffset.bottom,
-                child: widgetWrapper(
-                  (context) {
-                    setup?.call(context, theme.type.toThemeMode);
-                    return ColoredBox(
-                      color: getBackgroundColor(theme.data),
-                      child: widgetBuilder(context, theme.type),
-                    );
-                  },
-                  theme.type,
-                  theme.data,
-                  localizationsForTesting,
-                  [locale],
-                ),
-              ),
-            ),
-          );
-
-          await tester.pumpWidgetBuilder(
-            builder.build(),
-            surfaceSize: Size(
-              (config.size.width - config.cropOffset.left - config.cropOffset.right) * 2 + 50,
-              (config.size.height - config.cropOffset.bottom - config.cropOffset.top) + 100,
-            ),
-            wrapper: materialAppWrapper(),
-          );
-
-          await screenMatchesGolden(
-            tester,
-            _getGoldenName<T>(
-              theme,
-              screenState,
-              includeThemeName: !onlyOneTheme,
-              fromFigma: true,
-              size: config.size,
-              layoutName: config.layoutName,
-            ),
-          );
-        }
-      }
-    },
-  );
+        themeMode,
+        theme,
+        localizationsForTesting,
+        [locale],
+      ),
+    );
+  });
 }
 
 /// Forms the name of the golden file from:
@@ -276,47 +181,4 @@ String _getGoldenName<T>(
   }
 
   return result;
-}
-
-class _MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-  }
-}
-
-class _CustomImageClipper extends CustomClipper<Rect> {
-  final EdgeInsets cropOffset;
-
-  _CustomImageClipper(this.cropOffset);
-  @override
-  Rect getClip(Size size) {
-    return Rect.fromLTRB(
-      cropOffset.left,
-      cropOffset.top,
-      size.width - cropOffset.right,
-      size.height - cropOffset.bottom,
-    );
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Rect> oldClipper) {
-    return false;
-  }
-}
-
-class _CroppedImageWidget extends StatelessWidget {
-  final Uint8List imageBytes;
-  final EdgeInsets cropOffset;
-
-  const _CroppedImageWidget(this.imageBytes, this.cropOffset);
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRect(
-      clipper: _CustomImageClipper(cropOffset),
-      child: Image.memory(imageBytes),
-    );
-  }
 }
