@@ -36,8 +36,6 @@ late final WidgetWrapperBuilder widgetWrapper;
 @protected
 late final Color Function(ThemeData) getBackgroundColor;
 
-late final String? tokenFromFigma;
-
 /// Entry point for the widget test.
 ///
 /// - [testMain] - function that contains the actual test.
@@ -49,7 +47,6 @@ late final String? tokenFromFigma;
 /// - [backgroundColor] - background color for the golden file.
 /// - [devicesForTest] - list of devices used for testing.
 /// - [customComparator] - custom comparator for the golden file.
-/// - [figmaToken] - figma token for downloading images.
 Future<void> testExecutable({
   required FutureOr<void> Function() testMain,
   required List<TestingTheme> themes,
@@ -60,9 +57,7 @@ Future<void> testExecutable({
   List<Locale> locales = const [Locale('en')],
   double tolerance = 0.18,
   LocalFileComparator? customComparator,
-  String? figmaToken,
 }) {
-  tokenFromFigma = figmaToken;
   themesForTesting = themes;
   localizationsForTesting = localizations;
   localesForTesting = locales;
@@ -96,6 +91,7 @@ Future<void> testExecutable({
 /// Allows specifying the tolerance for the golden file.
 class CustomFileComparator extends LocalFileComparator {
   final double tolerance;
+
   CustomFileComparator(String testFile, this.tolerance) : super(Uri.parse(testFile));
 
   @override

@@ -2,7 +2,7 @@
 
 ## 1.0.0
 
-* Add possibility to compare Figma and implemented screens.
+* Add test strategy.
 
 ## 0.0.6
 

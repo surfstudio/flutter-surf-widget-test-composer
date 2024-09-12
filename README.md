@@ -318,47 +318,6 @@ Don't forget to generate goldens before use:
 flutter test --update-goldens --tags=golden
 ```
 
-## Figma integration
-
-You can also compare your implemented screens with Figma. To do this, you need to specify the Figma token in the `test/flutter_test_config.dart` file:
-
-```diff
-  return helper.testExecutable(
-    testMain: testMain,
-    themes: themes,
-    localizations: _localizations,
-    locales: _locales,
-++  figmaToken: 'your_figma_token',
-    ...
-  );
-```
-
-Now you can add figma links to your tests:
-
-```dart
-void main() {
-  const widget = SampleItemListView();
-
-  /// Nothing to test, just want to generate the golden.
-  testWidget<SampleItemListView>(
-    desc: 'SampleItemListView - result',
-    widgetBuilder: (context, _) => widget.build(context),
-    figmaLayouts: [
-      FigmaConfig(
-        size: Size(375, 667), // Dimensions of the screen in Figma.
-        theme: darkTheme, // Theme of the screen.
-        cropOffset: EdgeInsets.only(top: 20), // Offset for cropping the screenshot. E.g. if you have a status bar.
-        // Link to the screen in Figma. You can get it by clicking on the screen in Figma (Copy as -> Copy link to selection).
-        link: 'https://www.figma.com/link/to/your/screen', 
-      ),
-    ],
-    screenState: 'result',
-  );
-}
-```
-
-You will get picture with Figma screen and implemented screen in a row.
-
 ## Additional Information
 
 While testing, you can face the following errors:

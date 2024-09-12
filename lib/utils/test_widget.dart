@@ -21,7 +21,6 @@ typedef TestFunctionWithTheme = Future Function(WidgetTester, ThemeData);
 /// - [withGolden] - flag to determine if golden file updates should be performed for this widget.
 /// - [deviceMatters] - flag to determine if golden files should be generated for different devices.
 /// - [screenState] - string that allows specifying the screen state (e.g., loading, error).
-/// - [figmaLayouts] - list of figma configurations that allow comparing the implementation with the design. Make sure you provide the figma token in the `flutter_test_config.dart` file.
 /// - [skip] - Allows skipping the test.
 /// - [onlyOneTheme] - Uses only one of the themes for the test (the first one from the list).
 /// - [onlyOneLocale] - Uses only one of the locales for the test (the first one from the list).
@@ -151,7 +150,6 @@ String _getGoldenName<T>(
   String? state, {
   Locale? locale,
   bool includeThemeName = true,
-  bool fromFigma = false,
   Size? size,
   String? layoutName,
 }) {
@@ -169,16 +167,6 @@ String _getGoldenName<T>(
       '${formattedState == null ? '' : '$formattedState.'}'
       '${locale == null ? '' : '${locale.languageCode}.'}'
       '${includeThemeName ? theme.stringified : 'no_theme'}';
-
-  if (fromFigma) {
-    if (layoutName != null) {
-      result = 'figma.$layoutName.$result';
-    } else if (size != null) {
-      result = 'figma.${size.width.toInt()}x${size.height.toInt()}.$result';
-    } else {
-      result = 'figma.$result';
-    }
-  }
 
   return result;
 }
